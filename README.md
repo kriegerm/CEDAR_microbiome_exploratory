@@ -1,4 +1,3 @@
 # CEDAR_microbiome_exploratory 
 
-Test
-Test?
+Files relating to my CEDAR exploratory microbiome project. 

@@ -1,0 +1,907 @@
+---
+title: "02a Pediatric"
+author: "Madeline Krieger"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    theme: "cosmo"
+    code_folding: "show"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE,
+                      warning = FALSE,
+                      error = FALSE,
+                      fig.path = "./figures/02a/",
+                      fig.keep = "all",
+                      dev = c("png"),
+                      cache = FALSE,
+                      # Do not use lazy loading which fails for large objects
+                      cache.lazy = FALSE)
+```
+
+
+# 1.0 Load and Define
+
+## 1.1 Load packages and presets
+### 1.1.1 Packages
+```{r 1.1_load-packages}
+library("pacman")
+pacman::p_load("rmarkdown", "tidyverse", "phyloseq", "knitr","kableExtra", "here", "plyr", "ggpubr", "microViz", "readxl", "microbiome", "pheatmap", "vegan", "DirichletMultinomial", "reshape2", "magrittr", "microshades", "pheatmap","vegan", "data.table", "Polychrome", "fantaxtic","cetcolor", "topicmodels", "ldatuning", "cowplot", "MicrobiomeStat", "randomForest", "caret", "mlbench", "MLmetrics", "mia", "here", "patchwork", "digest", "ANCOMBC", "Maaslin2")
+
+here::i_am("02a_Pediatric.Rmd")
+
+``` 
+
+
+### 1.1.2 My packages
+```{r}
+load("MK_Microbiome_Functions.RData")
+```
+
+
+
+### 1.1.2 Colors and presents
+```{r}
+colors_all= c("Abscess" = "#FF495C", "Tumor"="#F0C808","Plaque"="#083D77", "AN"="#43AA8B" )
+plot_colors= c("Abscess" = "#FF495C", "Plaque"="#083D77","abscess" = "#FF495C", "plaque"="#083D77", 
+               "abnormal" = "#FF495C", "control"="#083D77",  "Abnormal" = "#FF495C", "Control"="#083D77"  )
+
+
+core_colors = c("#F76F8E","#083D77","#B8D4E3", "#FAAA00", "#3399FF","#FF495C","#477071", '#03CEA4',  "#5F00BA", "#BDAC9E", "white", "#FFD900")
+
+maaslin2_colors= c("CLR_LOG" = "#2c45b5", "CLR_NONE"="#86B8FD", 
+                   "CSS_LOG" = "#FF495C", "CSS_NONE"="#F2929A",
+                   "TMM_LOG" = "#F4B701", "TMM_NONE"="#FEE59A",
+                   "TSS_LOG" = "#8FD694", "TSS_NONE"="#D2EED4",
+                   "TSS_LOGIT" = "#354F52", "TSS_AST"="#CEDDDF")
+
+pal20 <- createPalette(22, c("#F76F8E","#03CEA4", "#083D77"), range = c(30, 80))
+pal20 <- unname(as.list(pal20))
+
+resolution <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
+
+set.seed(1234)
+date = Sys.Date()
+```
+
+
+## 1.2 Load data and process
+
+### 1.2.1 Load Data from 00
+```{r}
+# Load the saved Rds file
+loaded_objects <- readRDS("00data.rds")
+
+# Assign back the objects to the environment, if needed
+list2env(loaded_objects, .GlobalEnv)
+
+ps_obj_ped_f <- subset_samples(merged_phylo_obj_f, Study == "Pediatric")
+ps_obj_ped_fs <- subset_samples(merged_phylo_obj_fs, Study == "Pediatric")
+```
+
+
+### 1.2.2 Process Phyloseq
+```{r}
+process_phyloseq(ps_obj_ped_fs)
+```
+
+
+# 2.0 Ordinations
+
+## 2.1 PCA 
+```{r, fig.width=10, fig.height=15}
+plots <- lapply(resolution, function(rank) {
+  plot_pca(phyloseq_obj = ps_obj_ped_f, 
+           rank_transformation = rank, 
+           variable = "Type", 
+           colors_list = colors_all)})
+
+combined_plot <- wrap_plots(plots, ncol = 2) & theme(legend.position = "bottom") 
+combined_plot
+```
+
+
+## 2.2 PCoA NMDS Bray 
+```{r, fig.width=10, fig.height=15}
+plots <- lapply(resolution, function(rank) {
+  plot_PCoA(phyloseq_obj = ps_obj_ped_f,
+    rank_transformation = rank,
+    trans_type = "identity",        
+    dist_cal_type = "bray",   
+    ord_calc_method = "NMDS",
+    variable = "Type", 
+    colors_list = colors_all)})
+
+combined_plot <- wrap_plots(plots, ncol = 2) & theme(legend.position = "bottom") 
+print(combined_plot)
+```
+
+
+## 2.3 PCoA NMDS Jaccard 
+```{r, fig.width=10, fig.height=15}
+plots <- lapply(resolution, function(rank) {
+  plot_PCoA(phyloseq_obj = ps_obj_ped_f,
+    rank_transformation = rank,
+    trans_type = "identity",        
+    dist_cal_type = "jaccard",   
+    ord_calc_method = "NMDS",
+        variable = "Type", 
+    colors_list = colors_all)})
+
+combined_plot <- wrap_plots(plots, ncol = 2) & theme(legend.position = "bottom") 
+print(combined_plot)
+```
+
+
+
+# 3.0 Alpha diversity
+```{r}
+a_my_comparisons <- list( c("Abscess", "Plaque"))
+symnum.args = list(cutpoints = c(0, 0.001, 0.01, 0.05, 0.1, 1), symbols = c("****", "***", "**", "*", "ns"))
+
+p_Shannon <- plot_richness(ps_obj_ped_f, x="Type", measures="Shannon", color = "Type")+
+  geom_boxplot(alpha=0.6)+ 
+    theme_bw(base_size=14) +
+  theme(legend.position="none",         
+        axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1, size = 12), 
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size=12), 
+        strip.background = element_rect(fill = "white", color = "white"), 
+        strip.text = element_text(size = 14, face = "bold"))  +
+  stat_compare_means(method = "wilcox.test", comparisons = a_my_comparisons, label = "p.format")+
+  scale_color_manual(values = colors_all) +
+  ylim(0, 6.2)
+
+
+p_Chao1 <- plot_richness(ps_obj_ped_f, x="Type", measures="Chao1", color = "Type")+
+  geom_boxplot(alpha=0.6)+ 
+    theme_bw(base_size=14) +
+  theme(legend.position="none",         
+        axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1, size = 12), 
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size=12), 
+        strip.background = element_rect(fill = "white", color = "white"), 
+        strip.text = element_text(size = 14, face = "bold"))  +
+  stat_compare_means(method = "wilcox.test", comparisons = a_my_comparisons, label = "p.format")+
+  scale_color_manual(values = colors_all) +
+  ylim(0, 470)
+
+
+p_Observed <- plot_richness(ps_obj_ped_f, x="Type", measures="Observed", color = "Type")+
+  geom_boxplot(alpha=0.6)+ 
+    theme_bw(base_size=14) +
+  theme(legend.position="none",         
+        axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1, size = 12), 
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size=12), 
+        strip.background = element_rect(fill = "white", color = "white"), 
+        strip.text = element_text(size = 14, face = "bold"))  +
+  stat_compare_means(method = "wilcox.test", comparisons = a_my_comparisons, label = "p.format")+
+  scale_color_manual(values = colors_all) +
+  ylim(0, 470)
+
+plot <- ggarrange(p_Shannon, p_Observed, p_Chao1, ncol=3, nrow=1, common.legend = TRUE, legend="bottom")
+annotate_figure(plot, top = text_grob(paste0("Alpha Diversity"), color = "black", face = "bold", size = 14))
+```
+
+# 4.0 Taxa Plots
+
+## 4.1 Average Bar Plots
+
+### 4.1.1 Phylum 
+```{r taxa_phylum, fig.height=4, fig.width=4}
+
+top_df <- ps_obj_ped_fs_t_n %>%
+  tax_glom(., "Phylum") %>%
+  get_top_taxa(., 10, relative = TRUE, discard_other = TRUE) %>% psmelt(.)
+top_df$Phylum <- gsub("p__","",as.character(top_df$Phylum))
+
+top_df %>%
+  dplyr::group_by(Type,Phylum)%>%
+  dplyr::summarise(Average_Abundance = mean(Abundance))%>%
+  ggbarplot(x= "Type", y="Average_Abundance",
+            fill = "Phylum",
+            panel.labs.font = list(size=12),
+            panel.labs.background = list(color = NULL, fill = "white"),
+            font.tickslab = 14,
+            font.legend = c(10),
+            palette = core_colors, 
+            strip.position = "top",
+            color = "black",
+            x.text.angle = 45, 
+            y.text.angle = 0, 
+            font.x = 14,
+            font.y = 12,
+            font.title = 16,
+            rotate = FALSE,
+            title = "Phlyum Level", 
+            xlab = "",
+            ylab = "Average Relative Abundance",
+            ggtheme = theme_bw()) + 
+  font("title", face="bold") +
+  theme(plot.title=element_text(hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+```
+
+### 4.1.2 Genus 
+```{r taxa_genus, fig.height=4, fig.width=3}
+
+top_df <- ps_obj_ped_fs_t_n %>%
+  tax_glom(., "Genus") %>%
+  get_top_taxa(., 10, relative = TRUE, discard_other = TRUE) %>% psmelt(.)
+top_df$Genus <- gsub("g__","",as.character(top_df$Genus))
+
+top_df %>%
+  dplyr::group_by(Type,Genus)%>%
+  dplyr::summarise(Average_Abundance = mean(Abundance))%>%
+  ggbarplot(x= "Type", y="Average_Abundance",
+            fill = "Genus",
+            panel.labs.font = list(size=12),
+            panel.labs.background = list(color = NULL, fill = "white"),
+            font.tickslab = 14,
+            font.legend = c(10),
+            palette = core_colors, 
+            strip.position = "top",
+            color = "black",
+            x.text.angle = 45, 
+            y.text.angle = 0, 
+            font.x = 14,
+            font.y = 12,
+            font.title = 16,
+            rotate = FALSE,
+            title = "Top 10 Genera", 
+            xlab = "",
+            ylab = "Average Relative Abundance",
+            ggtheme = theme_bw()) + 
+  font("title", face="bold") +
+  theme(plot.title=element_text(hjust=0.5), plot.subtitle=element_text(hjust=0.5), legend.text = element_text(face = "italic"))
+```
+
+### 4.1.3 Microshades Genus MB
+```{r, fig.width=8, fig.height=4}
+# Use microshades function prep_mdf to agglomerate, normalize, and melt the phyloseq object
+mdf_prep <- prep_mdf(ps_obj_ped_fs)
+
+mdf_prep <- mdf_prep %>%
+  mutate(Kingdom = gsub("k__", "", Kingdom)) %>%
+  mutate(Phylum = gsub("p__", "", Phylum)) %>%
+  mutate(Class = gsub("c__", "", Class)) %>%
+  mutate(Order = gsub("o__", "", Order)) %>%
+  mutate(Family = gsub("f__", "", Family)) %>%
+  mutate(Genus = gsub("g__", "", Genus)) %>%
+  mutate(Species = gsub("s__", "", Species)) 
+
+print(unique(mdf_prep$Phylum))
+
+# Create a color object for the specified data
+color_obj <- create_color_dfs(mdf_prep, 
+            selected_groups = c("Proteobacteria", "Actinobacteria","Bacteroidetes", "Fusobacteria",
+                                "Spirochaetes"),
+    cvd = FALSE, top_orientation=TRUE)
+
+# Extract
+mdf <- color_obj$mdf
+cdf <- color_obj$cdf
+
+plot_1 <- plot_microshades(mdf, cdf)
+
+plot_1 + scale_y_continuous(labels = scales::percent, expand = expansion(0)) +
+  theme_bw() +
+  theme(legend.key.size = unit(0.2, "cm"), text=element_text(size=10), ) +
+  theme(axis.text.x = element_text(size= 6)) +
+  facet_wrap(~Type, scales= "free_x") 
+```
+
+
+
+### 4.1.4 Species 
+```{r species}
+top_df <- ps_obj_ped_fs_t_n %>%
+  tax_glom(., "Species") %>%
+  get_top_taxa(., 10, relative = TRUE, discard_other = TRUE) %>% psmelt(.)
+top_df$Species <- gsub("s__","",as.character(top_df$Species))
+
+top_df %>%
+  dplyr::group_by(Type,Species)%>%
+  dplyr::summarise(Average_Abundance = mean(Abundance))%>%
+  ggbarplot(x= "Type", y="Average_Abundance",
+            fill = "Species",
+            panel.labs.font = list(size=12),
+            panel.labs.background = list(color = NULL, fill = "white"),
+            font.tickslab = 10,
+            font.legend = c(10),
+            palette = pal20, 
+            strip.position = "top",
+            color = "black",
+            x.text.angle = 90, 
+            y.text.angle = 0, 
+            font.x = 12,
+            font.y = 12,
+            font.title = 16,
+            rotate = TRUE,
+            title = "", 
+            subtitle = "Species level",
+            xlab = "Condition",
+            ylab = "Average Abundance",
+            ggtheme = theme_bw()) + 
+  font("title", face="bold") +
+  theme(plot.title=element_text(hjust=0.5), plot.subtitle=element_text(hjust=0.5))
+```
+
+
+## 4.2 Per taxa plots
+
+### 4.2.1 Genus TSS Dot
+```{r, fig.width=15, fig.height=50}
+plot_all_taxa(ps_obj_ped_fs, "TSS", "condition", "Genus", "dot", plot_colors)
+```
+
+
+# 5.0 Core Microbiome
+```{r}
+core_ps <- ps_obj_ped_fs_t_n
+
+# Agglomerate to the species level
+core_ps_species <- tax_glom(core_ps, taxrank = "Species")
+core_ps_genus <- tax_glom(core_ps, taxrank = "Genus")
+
+# Initialize an empty dataframe to store results
+results <- data.frame(prevalence = numeric(), percent_OTUs = numeric())
+
+# Get the total number of OTUs at the species level
+total_OTUs <- length(taxa_names(core_ps_species))
+
+# Loop through prevalence values from 0.1 to 1
+for (p in seq(0.1, 1, by = 0.1)) {
+  core.taxa <- core_members(core_ps_species, detection = 0.00001, prevalence = p)
+  num_OTUs <- length(core.taxa)
+  percent_OTUs <- (num_OTUs / total_OTUs) * 100
+  
+  # Append the results to the dataframe
+  results <- rbind(results, data.frame(prevalence = p*100, percent_OTUs = percent_OTUs))
+}
+
+# Create a line graph using ggplot2
+ggplot(results, aes(x = prevalence, y = percent_OTUs)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Percent of Total Species Detectioned",
+       x = "Percent of Samples Containing Taxa",
+       y = "Percent of Total Taxa") +
+  theme_minimal()
+```
+
+```{r, fig.height=9, fig.width=7}
+
+# Get the total list of species
+genus_list <- taxa_names(core_ps_genus) 
+
+# Initialize an empty list to store core genera at each prevalence level
+core_genus_list <- list()
+
+# Loop through prevalence values from 0.1 to 1
+for (p in seq(0.1, 1, by = 0.05)) {
+  core.taxa <- core_members(core_ps_genus, detection = 0.00001, prevalence = p)
+  core_genus_list[[as.character(p)]] <- core.taxa
+}
+
+# Create a binary matrix indicating the presence (1) or absence (0) of genera in the core microbiome
+core_matrix <- matrix(0, nrow = length(genus_list), ncol = length(core_genus_list),
+                      dimnames = list(genus_list, names(core_genus_list)))
+
+for (p in names(core_genus_list)) {
+  core_matrix[core_genus_list[[p]], p] <- 1
+}
+
+# Remove rows and columns that sum to zero
+core_matrix <- core_matrix[rowSums(core_matrix) > 0, colSums(core_matrix) > 0]
+
+# Replace OTU names with genus names in the tax_table
+tax_table_genus <- as.data.frame(tax_table(core_ps_genus))
+genus_names <- tax_table_genus[rownames(core_matrix), "Genus"]
+
+# Create a new matrix with genus names as rownames
+core_matrix_genus <- core_matrix
+genus_names <- gsub("g__", "", genus_names)
+
+rownames(core_matrix_genus) <- genus_names
+
+
+# Sort the matrix by row sums
+row_sums <- rowSums(core_matrix_genus)
+core_matrix_genus <- core_matrix_genus[order(row_sums, decreasing = TRUE), ]
+
+
+
+# Convert the data frame to row-wise format while keeping row names
+core_df_genus <- core_matrix_genus %>% as.data.frame() %>% rownames_to_column(var="Genera") %>%
+  rowwise() %>%
+  mutate(row_total = sum(c_across(starts_with("0.")))) %>%
+  arrange(dplyr::desc(row_total)) %>%
+  ungroup() %>%
+  mutate(Genera = factor(Genera, levels = unique(Genera))) %>%
+  dplyr::select(-row_total) %>% 
+  pivot_longer(cols = -Genera,
+               names_to = "prevalence",
+               values_to = "value") 
+
+# Pivoting the data longer and plotting
+plot <- ggplot(core_df_genus, aes(x = prevalence, y = Genera, fill = value)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "white", high = "grey", name = "Prevalence") +
+  labs(title = "Core Genera at Different Prevalence Levels",
+       x = "Prevalence Level",
+       y = "Genera") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y = element_text(size = 8),
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+    legend.position = "right",
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 8)
+  )
+plot
+#ggsave(plot, filename = "~/Desktop/core_genera.png", width = 15, height = 25, units = "cm")
+```
+
+
+# Differential Abundance
+## 6.1 ANCOMBC2
+
+### 6.1.1 Phylum
+```{r, fig.height=7, fig.width=10}
+runANCOM(ps_obj_ped_fs, 
+         tax_level = "Phylum", 
+         group = "Type", 
+         name_of_saved_results = "ancombc_results_phy", 
+         plot_type = "dot",
+         Log2FC_cutoff = 0.5,
+         plot_heights = c(1,2),
+         plot_colors = plot_colors )
+```
+
+### 6.1.2 Genus
+```{r, fig.height=30, fig.width=10}
+runANCOM(ps_obj_ped_fs, 
+         tax_level = "Genus", 
+         group = "Type", 
+         name_of_saved_results = "ancombc_results_gen", 
+         plot_type = "dot",
+         plot_heights = c(1, 8),
+         plot_colors = plot_colors )
+```
+
+### 6.1.3 Species
+```{r, fig.height=45, fig.width=10}
+runANCOM(ps_obj_ped_fs, 
+         tax_level = "Species", 
+         group = "Type", 
+         name_of_saved_results = "ancombc_results_sp", 
+         plot_type = "dot",
+         #Log2FC_cutoff = 0.5,
+         plot_heights = c(1, 8),
+         plot_colors = plot_colors )
+```
+
+
+## 6.2 Maaslin2
+
+### 6.2.1 Iterate Parameters
+```{r, eval=FALSE, fig.height=8, fig.width=10}
+resolutions <- c("Species", "Genus", "Phylum")
+iterate_maaslin2(ps_obj = ps_obj_ped_fs, 
+                 iterative_methods = iterative_methods,
+                 resolutions = resolutions,
+                 group = "condition",
+                 qval_threshold = .25, 
+                 plot_colors = maaslin2_colors, 
+                 percentage = TRUE)
+```
+
+### 6.2.2 Run Maaslin2
+
+#### Genus
+```{r, fig.width=10, fig.height=65}
+run_Maaslin2(ps_obj = ps_obj_ped_fs, 
+                                 taxa_level = "Genus", 
+                                 group = "condition",
+                                 analysis_method = "LM", 
+                                 normalization = "CSS",
+                                 transform = "LOG", 
+                                 plot_colors = plot_colors,
+                                 plot_type = "dot", 
+                                 qval_threshold= 0.1, 
+                                 plot_heights = c(1, 9))
+```
+
+#### Species
+```{r, fig.width=10, fig.height=65}
+run_Maaslin2(ps_obj = ps_obj_ped_fs, 
+                                 taxa_level = "Species", 
+                                 group = "condition",
+                                 analysis_method = "LM", 
+                                 normalization = "CSS",
+                                 transform = "LOG", 
+                                 plot_colors = plot_colors,
+                                 plot_type = "dot", 
+                                 qval_threshold= 0.1, 
+                                 plot_heights = c(1, 9))
+```
+
+## 6.3 AlDEX2
+
+### 6.3.1 Iterate Parameters
+https://www.nature.com/articles/s41467-022-28034-z
+
+"...performed CLR transformation of each realization, and then performed Wilcoxon tests on the transformed realizations. The function then returned the expected Benjamini-Hochberg (BH) FDR-corrected p-value for each feature based on the results the different across Monte Carlo samples."
+
+ALDEx2 uses by default the centred log-ratio (clr) transformation which is scale invariant
+
+```{r, eval=FALSE,  fig.width=20, fig.height=12}
+resolutions <- c("Species", "Genus", "Phylum")
+
+ 
+iterate_aldex2(ps_obj = ps_obj_ped_fs, 
+                 iterative_methods = iterative_methods,
+                 resolutions = resolutions,
+                 group = "condition",
+                 percentage = FALSE)
+
+aldex2_iterative_summary_table %>%
+  filter(resolution == "Genus") %>%
+  filter(paired == FALSE) %>%
+  filter(paired == FALSE) %>%
+  filter(denom == "all") %>%
+  filter(transform == "log10") %>%
+  dplyr::arrange(desc(significant_features)) %>%
+  filter(significant_features > 0)
+
+```
+
+### 6.3.2 Run Aldex2
+
+#### Genus
+```{r}
+run_aldex2(ps_obj_ped_fs, 
+                       "condition", 
+                       "Genus",
+                       method = "wilcox.test",
+                       transform = "log10",
+                       normalization = "CSS")
+```
+
+#### Species
+```{r, fig.width=12}
+run_aldex2(ps_obj_ped_fs, 
+                       "condition", 
+                       "Species",
+                       method = "wilcox.test",
+                       transform = "log10",
+                       normalization = "CSS")
+```
+
+
+## 6.4 Combine results
+
+### Genus
+```{r, fig.height=6, fig.width=5}
+combine_DA(maaslin2_results_Genus, ancombc2_results_df_Genus, aldex2_res_Genus, "Type", "Genus", c(1,3))
+```
+
+### Species
+```{r, fig.height=10, fig.width=5}
+combine_DA(maaslin2_results_Species, ancombc2_results_df_Species, aldex2_res_Species, "Type", "Species", c(1,4))
+```
+
+
+
+
+# 8.0 Topic Modeling
+
+## Genus .001
+
+### Prep and binarize input
+```{r, fig.width=4, fig.height=7}
+#Prepare data from phyloseq object and binarize at a certain threshold of relative abundance
+prep_data_binarize <- function(phy_obj, taxa_level, binarization_threshold){
+  # Extract metadata
+  meta_data <- phy_obj@sam_data %>% 
+    as.matrix() %>% as.data.frame() %>% 
+    dplyr::select(c("Type", "Sample"))
+  
+  #Make counts table - not currently used, but saving this
+  #counts_data <- tax_glom(phy_obj, taxrank = taxa_level, NArm = TRUE) %>%
+  #  psmelt() %>% as.matrix() %>% as.data.frame() %>%
+  #  dplyr::select(c("Sample", "Abundance", taxa_level)) %>%
+  #  pivot_wider(names_from = taxa_level, values_from = "Abundance") %>%
+  #  column_to_rownames(var = "Sample")
+  
+  #Create Relative Abundance Table
+  counts_data <- tax_glom(phy_obj, taxa_level) %>%
+    transform_sample_counts(., function(x) (x + 0.000001 - min(x))) %>%
+    transform_sample_counts(., function(x) (x) / sum(x)) %>% psmelt(.)  %>%
+    dplyr::select(c("Sample", "Abundance", taxa_level)) %>%
+    pivot_wider(names_from = taxa_level, values_from = "Abundance") %>%
+    column_to_rownames(var="Sample") %>%
+    mutate(across(where(is.numeric), ~ ifelse(. > binarization_threshold, 1, 0))) #Apply binarization threshold
+
+  # Extract row names
+  row_names <- rownames(counts_data)
+  
+  # Convert columns to integer
+  counts_data <- as.data.frame(lapply(counts_data, as.integer))
+  
+  # Reassign row names
+  rownames(counts_data) <- row_names
+  
+
+  #Reformat data into long format
+  counts_data_long <- counts_data %>%
+    pivot_longer(
+      cols = everything(), 
+      names_to = "taxa", 
+      values_to = "Count"
+    )
+  
+  #Create a histogram
+  p <- ggplot(counts_data_long, aes(x = Count)) +
+    geom_histogram(binwidth = 0.5, fill = "blue", color = "black", alpha = 0.7) +
+    labs(title = "Histogram of Values", x = "Value", y = "Frequency") +
+    stat_bin(
+        binwidth = 0.5,
+        aes(label = after_stat(count)),
+        geom = "text",
+        vjust = -0.5, # Adjust the vertical position of the text
+        color = "black",
+        size = 3
+    ) +
+    theme_bw()
+  
+  print(p)
+  
+  
+  # Return metadata and counts data as a named list
+  return(list(meta_data = meta_data, counts_data = counts_data))
+  
+}
+
+results_threshold <- prep_data_binarize(ps_obj_ped_fs, "Genus", .001)
+meta_data <- results_threshold$meta_data
+
+counts_data <- results_threshold$counts_data
+```
+
+### Use FindTopicsNumber() 
+Calculates different metrics to estimate the most preferable number of topics for LDA model.
+CaoJuan2009: https://www.sciencedirect.com/science/article/pii/S092523120800372X
+Arun2010: https://link.springer.com/chapter/10.1007/978-3-642-13657-3_43
+
+Questions: How does this relate to perplexity? What about alpha values?
+```{r, fig.width=10, fig.height=5}
+
+RunFindTopicsNumber <- function(counts_data, topics, method){ 
+  result <- FindTopicsNumber(
+      counts_data,
+      topics = topics,
+      metrics = c("Griffiths2004", "CaoJuan2009", "Arun2010", "Deveaud2014"),
+      method = method,
+      control = list(seed = 1234),
+      mc.cores = 2L,
+      verbose = TRUE
+    ) 
+  FindTopicsNumber_plot(result)
+}
+
+topics <- seq(from = 2, to = 50, by = 2)
+RunFindTopicsNumber(counts_data, topics, "Gibbs")
+
+```
+
+### Iteratve over alpha and k-values
+Lower perplexity score = better
+Alpha values: alpha represents document-topic density - with a higher alpha, documents are made up of more topics, and with lower alpha, documents contain fewer topics. 
+Beta represents topic-word density - with a high beta, topics are made up of most of the words in the corpus, and with a low beta they consist of few words.
+```{r, fig.height=12, fig.width=12}
+iterate_alpha_kvalues <- function(counts_data, topic_no_iterations, alpha_iterations, method){
+  
+    # Create an empty dataframe to store results
+  perplexity_alpha_results <- data.frame(
+    k_value = integer(),
+    alpha = numeric(),
+    perplexity = numeric(),
+    stringsAsFactors = FALSE
+  )
+      
+  # Generate all combinations using expand.grid
+      combinations <- expand.grid(topic_no = topic_no_iterations,
+                                  alpha = alpha_iterations)
+      
+      # Convert each row into a list and store in a list
+      iterative_methods <- apply(combinations, 1, function(x) {
+        list(topic_no = x["topic_no"],
+             alpha = x["alpha"])
+        })
+        
+      for (params in iterative_methods) {
+        
+        # Extract parameters for the current iteration
+        k_value <- as.numeric(params$topic_no)
+        alpha <- as.numeric(params$alpha)
+
+        lda_model <- LDA(counts_data, k = k_value, method = method, control = list(seed = 1234, alpha=alpha))
+        perplex = perplexity(lda_model, newdata=as.matrix(counts_data))
+        
+      perplexity_alpha_results <- rbind(
+      perplexity_alpha_results,
+      data.frame(k_value = k_value, alpha = alpha, perplexity = perplex)
+    )
+  }
+
+        # Assuming `results` is the dataframe returned by your function
+    P <- ggplot(perplexity_alpha_results, aes(x = alpha, y = perplexity)) +
+      geom_line() +  # Line for perplexity
+      geom_point() + # Points for clarity
+      facet_wrap(~ k_value, ncol=3) +  # Facet by k_value
+      labs(
+        title = "Perplexity Across Alpha Values for Different k_values",
+        x = "Alpha Value",
+        y = "Perplexity"
+      ) +
+        theme_bw() +
+        theme(
+          strip.text = element_text(size = 12, face = "bold"),  # Facet labels
+          axis.text = element_text(size = 10),
+          axis.title = element_text(size = 12),
+          plot.title = element_text(size = 14, face = "bold")
+        )
+    
+    P
+}
+
+topic_no_iterations <- seq(2, 20, by=2)
+alpha_iterations <- seq(1, 100, by=2)
+iterate_alpha_kvalues(counts_data, topic_no_iterations, alpha_iterations, "Gibbs")
+
+
+```
+
+
+
+### Create the model
+
+https://bookdown.org/josephine_lukito/j381m_tutorial/ldatm.html
+```{r}
+
+#CREATE THE MODEL
+create_topic_model <- function(counts_data, k_value, alpha, method){
+  
+    lda_model <- LDA(counts_data, k = k_value, method = method, control = list(seed = 1234, alpha=alpha))
+    print(paste0("Perplexity is: ", perplexity(lda_model, newdata=as.matrix(counts_data))))
+    
+    b_df <- data.frame(tidytext::tidy(lda_model, matrix = "beta"))
+    g_df <- data.frame(tidytext::tidy(lda_model, matrix = "gamma")) %>%
+        arrange(document, topic)
+    print(paste0("Alpha value is: ", lda_model@alpha))
+  
+    return(list(lda_model = lda_model, b_df = b_df, g_df=g_df))
+}
+
+result <- create_topic_model(counts_data, 6, 1, "Gibbs")
+
+
+```
+
+### Plot beta
+```{r, fig.height=7, fig.width=10}
+#Plot beta, or the numbers that are assigned to each word in a topic. If the beta score is higher, the word matters more in that topic.
+
+plot_beta <- function(lda_result){
+    top_terms <- result$b_df %>% 
+      group_by(topic) %>% #groups by topic
+      top_n(10, beta) %>% #takes the words with the top 10 beta scores
+      ungroup() #ungroups the topic
+    
+    top_terms %>% 
+      ggplot(aes(x = tidytext::reorder_within(term, beta, topic, sep = "_"), 
+                 y =  beta, 
+                 fill = factor(topic))) +
+      geom_bar(stat = 'identity', show.legend = FALSE) +
+      facet_wrap(~ topic, scales = "free") + 
+      coord_flip()
+
+}
+
+plot_beta(results)
+```
+### Heatmap of gamma scores 
+```{r}
+#If you view the topics_wide data frame, you can see that each document has a gamma score for each topic. Some gamma scores are larger than others. This suggests that a document’s content is predominantly in one topic as opposed to another.
+
+heatmap_gamma <- function(lda_results){
+    topics_wide <- result$g_df %>%
+      pivot_wider(names_from = topic,
+                  values_from = gamma)
+
+    topics_wide_type <- meta_data%>% select(c("Type")) %>% 
+      rownames_to_column(var="document") %>% 
+      merge.data.frame(topics_wide, by="document")
+    topics_wide_type <- topics_wide_type[order(topics_wide_type$Type), ]
+    
+    annotations <- topics_wide_type%>% select(c( "document", "Type")) %>%
+      mutate(Type = factor(Type, levels = c("Plaque", "Abscess"))) %>% # Reorder levels
+      remove_rownames() %>% column_to_rownames(var="document")
+        
+    data <- topics_wide_type %>% select(-c("Type")) %>% remove_rownames() %>% column_to_rownames(var="document") %>% t()
+        
+    # Create the heatmap
+    pheatmap(
+          data,
+          annotation_col = annotations,  # Add column annotations
+          scale = "row",               # Scale rows (optional)
+          cluster_rows = TRUE,         # Cluster rows
+          cluster_cols = FALSE,         # Cluster columns
+          color = colorRampPalette(c("blue", "white", "red"))(50),  # Custom color palette
+          show_rownames = TRUE,        # Show row names
+          show_colnames = FALSE         # Show column names
+        )
+}
+
+heatmap_gamma(results)
+```
+
+
+
+
+### UMAP of gamma scores
+```{r}
+library(umap)
+
+plot_gamma_umap <- function(lda_results){
+    topics_wide <- result$g_df %>%
+          pivot_wider(names_from = topic,
+                      values_from = gamma) 
+    
+    res_with_annotations <- meta_data %>% select(c("Type")) %>% 
+          rownames_to_column(var="document") %>% 
+          merge.data.frame(topics_wide, by="document") 
+    
+    #Set UMAP seed
+    custom.config <- umap.defaults
+    custom.config$random_state <- 1234
+    
+    # Run UMAP
+    umap_result <- res_with_annotations %>% select(-c("Type")) %>% column_to_rownames(var="document") %>% umap(., config=custom.config)
+    
+    # Convert the annotations to numeric for coloring
+    annotations <- res_with_annotations %>% column_to_rownames(var="document") %>%  pull(Type)  # Extract "Type" as a vector
+    type_colors <- c("Abscess" = "red", "Plaque" = "blue")  # Assign colors to each type
+    colors <- type_colors[annotations]  # Match colors to each sample
+    
+    # Plot UMAP
+    plot(umap_result$layout, 
+         col = colors,
+         pch = 19,           # Point type
+         xlab = "UMAP 1", 
+         ylab = "UMAP 2", 
+         main = "UMAP Visualization")
+}
+
+plot_gamma_umap(results)
+```
+
+
+
+### Run model and plot
+```{r, fig.width=8, fig.height=6}
+result <- create_topic_model(counts_data, 6, 1, "Gibbs")
+
+plot_beta(results)
+heatmap_gamma(results)
+plot_gamma_umap(results)
+```
+
