@@ -1,0 +1,245 @@
+---
+title: "Data_Exploration"
+author: "Madeline Krieger"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    theme: "cosmo"
+    code_folding: "show"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE,
+                      warning = FALSE,
+                      error = FALSE,
+                      fig.keep = "none",
+                      dev = c("png"),
+                      cache = FALSE,
+                      # Do not use lazy loading which fails for large objects
+                      cache.lazy = FALSE)
+```
+
+
+# 1.0 Load and Define
+
+## 1.1 Load packages and presets
+### 1.1.1 Packages
+```{r 1.1_load-packages}
+library("pacman")
+pacman::p_load("rmarkdown", "tidyverse", "phyloseq", "knitr","kableExtra", "here", "plyr", "ggpubr", "microViz", "readxl", "microbiome", "pheatmap", "vegan", "DirichletMultinomial", "reshape2", "magrittr", "microshades", "pheatmap","vegan", "data.table", "Polychrome", "fantaxtic","cetcolor", "topicmodels", "ldatuning", "cowplot", "MicrobiomeStat", "randomForest", "caret", "mlbench", "MLmetrics", "mia", "here", "patchwork", "digest", "ANCOMBC", "Maaslin2")
+
+here::i_am("Data_exploration_01.2025.Rmd")
+
+``` 
+
+
+### 1.1.2 My packages
+```{r}
+load("MK_Microbiome_Functions.RData")
+```
+
+
+
+### 1.1.2 Colors and presents
+```{r}
+colors_all= c("Abscess" = "#FF495C", "Tumor"="#F0C808","Plaque"="#083D77", "AN"="#43AA8B" )
+plot_colors= c("Abscess" = "#FF495C", "Plaque"="#083D77","abscess" = "#FF495C", "plaque"="#083D77", 
+               "abnormal" = "#FF495C", "control"="#083D77",  "Abnormal" = "#FF495C", "Control"="#083D77"  )
+
+
+core_colors = c("#F76F8E","#083D77","#B8D4E3", "#FAAA00", "#3399FF","#FF495C","#477071", '#03CEA4',  "#5F00BA", "#BDAC9E", "white", "#FFD900")
+
+maaslin2_colors= c("CLR_LOG" = "#2c45b5", "CLR_NONE"="#86B8FD", 
+                   "CSS_LOG" = "#FF495C", "CSS_NONE"="#F2929A",
+                   "TMM_LOG" = "#F4B701", "TMM_NONE"="#FEE59A",
+                   "TSS_LOG" = "#8FD694", "TSS_NONE"="#D2EED4",
+                   "TSS_LOGIT" = "#354F52", "TSS_AST"="#CEDDDF")
+
+pal20 <- createPalette(22, c("#F76F8E","#03CEA4", "#083D77"), range = c(30, 80))
+pal20 <- unname(as.list(pal20))
+
+resolution <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
+
+set.seed(1234)
+date = Sys.Date()
+```
+
+
+## 1.2 Load data and process
+
+### 1.2.1 Load Data from 00
+```{r}
+# Load the saved Rds file
+loaded_objects <- readRDS("00data.rds")
+
+# Assign back the objects to the environment, if needed
+list2env(loaded_objects, .GlobalEnv)
+
+ps_obj_ped_f <- subset_samples(merged_phylo_obj_f, Study == "Pediatric")
+ps_obj_ped_fs <- subset_samples(merged_phylo_obj_fs, Study == "Pediatric")
+```
+
+### 1.2.2 Process Phyloseq
+```{r}
+process_phyloseq(ps_obj_ped_fs)
+```
+
+
+
+
+# 2.0 Housekeeping Taxa
+```{r, fig.width=15}
+
+taxa_level = "Species"
+
+ps_obj_ped_fs_filt <-tax_filter(
+  ps_obj_ped_fs,
+  min_prevalence = 1,
+  prev_detection_threshold = 1,
+  min_total_abundance = 0,
+  min_sample_abundance = 0,
+  tax_level = NA,
+  names_only = FALSE,
+  use_counts = TRUE,
+  undetected = NULL,
+  verbose = TRUE
+)
+
+
+df <- ps_obj_ped_fs_filt %>% tax_glom(., taxa_level) %>%psmelt(.)  %>%
+    dplyr::select(c("Sample", "Abundance", taxa_level)) %>%
+    pivot_wider(names_from = taxa_level, values_from = "Abundance") %>%
+    column_to_rownames(var="Sample") 
+
+# Calculate the variance for each numeric column
+variances <-lapply(df, var, na.rm = TRUE)
+
+# Create a dataframe
+variances_df <- data.frame(
+  Taxa = names(variances),             # Taxa names
+  Variance = unlist(variances)) %>%         # Variances as a numeric vector
+  arrange(Variance)
+
+# View the result
+print(variances_df)
+top_stable_taxa_list <- as.list(variances_df$Taxa[1:10])
+
+
+ps_obj_ped_fs %>% tax_select(., top_stable_taxa_list) %>%
+  plot_all_taxa(., "TSS", "condition", "Species", "dot", plot_colors)
+
+ps_obj_ped_fs %>% tax_select(., top_stable_taxa_list) %>%
+  plot_all_taxa(., "counts", "condition", "Species", "dot", plot_colors)
+
+```
+
+
+# 3.0 Data transformation
+
+```{r}
+
+df <- merged_phylo_obj_fs@otu_table  %>% as.matrix() %>% as.data.frame()
+
+
+# Define transformations as functions
+transformations <- list(
+  none = function(x) x,
+  TSS = function(x) microbiomeMarker::normalize(x, "TSS"),                   
+  CLR = function(x) microbiomeMarker::normalize(x, "CLR"), 
+  CSS = function(x) microbiomeMarker::normalize(x, "CSS"),                                   
+  RLE = function(x) microbiomeMarker::normalize(x, "RLE"),  
+  TMM = function(x) microbiomeMarker::normalize(x, "TMM")                               
+)
+
+
+
+# Initialize an empty dataframe to store the results
+result <- data.frame(
+  Transformation = character(),
+  Sample = character(),
+  ASV = character(),
+  Value = numeric(),
+  stringsAsFactors = FALSE
+)
+
+# Iterate over the transformations
+for (transformation_name in names(transformations)) {
+  transformation <- transformations[[transformation_name]]
+  
+  # Apply the transformation
+  transformed_matrix <- transformation(as.matrix(df[, -1]))
+  
+  # Convert the transformed matrix back to a dataframe
+  transformed_df <- as.data.frame(transformed_matrix)
+  transformed_df <- transformed_df %>% 
+    rownames_to_column(var = "Sample")
+  
+  # Convert to long format
+  long_df <- transformed_df %>%
+    pivot_longer(
+      cols = -Sample,
+      names_to = "ASV",
+      values_to = "Value"
+    ) %>%
+    mutate(Transformation = transformation_name)
+  
+  # Append to the result dataframe
+  result <- bind_rows(result, long_df)
+}
+
+plot_no_scale <- ggplot(result, aes(x = Value)) +
+  geom_histogram(bins = 30, fill = "skyblue", color = "black", alpha = 0.7) +
+  facet_wrap(~ Transformation, scales = "free", ncol = 3) +
+  labs(
+    title = "No scaling",
+    x = "",
+    y = "Frequency"
+  ) +
+  theme_minimal() + xlim(c(0, 100))
+
+plot_scale_y <- ggplot(result, aes(x = Value)) +
+  geom_histogram(bins = 30, fill = "skyblue", color = "black", alpha = 0.7) +
+  facet_wrap(~ Transformation, scales = "free", ncol = 3) +
+  labs(
+    title = "Log Scale on y-axis",
+    x = "",
+    y = "Frequency"
+  ) +
+  theme_minimal()+ scale_y_log10()
+
+plot_scale_x <- ggplot(result, aes(x = Value)) +
+  geom_histogram(bins = 30, fill = "skyblue", color = "black", alpha = 0.7) +
+  facet_wrap(~ Transformation, scales = "free", ncol = 3) +
+  labs(
+    title = "Log Scale on x-axis",
+    x = "",
+    y = "Frequency"
+  ) +
+  theme_minimal()+ scale_x_log10()
+
+plot_no_scale
+plot_scale_y
+plot_scale_x
+
+```
+
+
+```{r}
+result %>%
+filter(Transformation == "none") %>%
+ggplot(., aes(x = Value)) +
+  geom_histogram(bins = 5000, fill = "skyblue", color = "black", alpha = 0.7) +
+  #facet_wrap(~ Transformation, scales = "free", ncol = 3) +
+  labs(
+    title = "No scaling",
+    x = "",
+    y = "Frequency"
+  ) +
+  theme_minimal() +coord_cartesian(xlim = c(0, 200), ylim = c(0, 20000)) 
+
+```
+
