@@ -1,0 +1,255 @@
+---
+title: "01 batch correction"
+author: "Madeline Krieger"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    theme: "cosmo"
+    code_folding: "show"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE,
+                      warning = FALSE,
+                      error = FALSE,
+                      fig.path = "./figures/01/",
+                      fig.keep = "all",
+                      dev = c("png"),
+                      cache = FALSE,
+                      # Do not use lazy loading which fails for large objects
+                      cache.lazy = FALSE)
+```
+
+
+# 1.0 Load and Define
+
+## 1.1 Load packages and presets
+### 1.1.1 Outpside Packages
+```{r 1.1_load-packages}
+library("pacman")
+pacman::p_load("rmarkdown", "tidyverse", "phyloseq", "knitr","kableExtra", "here", "plyr", "ggpubr", "microViz", "readxl", "microbiome", "pheatmap", "vegan", "DirichletMultinomial", "reshape2", "magrittr", "microshades", "pheatmap","vegan", "data.table", "Polychrome", "fantaxtic","cetcolor", "topicmodels", "ldatuning", "cowplot", "MicrobiomeStat", "randomForest", "caret", "mlbench", "MLmetrics", "mia", "here", "patchwork", "digest")
+
+here::i_am("01b_batch_correction.Rmd")
+
+``` 
+
+
+### 1.1.2 My packages
+```{r}
+load("MK_Microbiome_Functions.RData")
+```
+
+
+
+### 1.1.3 Colors and presets
+```{r}
+colors_all= c("Abscess" = "#FF495C", "Tumor"="#F0C808","Plaque"="#083D77", "AN"="#43AA8B" )
+colors_study= c("AdultAbscess" = "#FF495C", "Pediatric"="#3399FF","OSCC"="#03CEA4" )
+
+
+core_colors = c("#F76F8E","#083D77","#B8D4E3", "#FAAA00", "#3399FF","#FF495C","#477071", '#03CEA4',  "#5F00BA", "#BDAC9E", "white", "#FFD900")
+
+
+resolution <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
+
+set.seed(1234)
+date = Sys.Date()
+```
+
+
+## 1.3 Load and process
+
+### 1.3.1 Load Data from 00
+```{r}
+# Load the saved Rds file
+loaded_objects <- readRDS("00data.rds")
+
+# Assign back the objects to the environment, if needed
+list2env(loaded_objects, .GlobalEnv)
+```
+
+
+### 1.3.2 Process Phyloseq
+```{r}
+process_phyloseq(merged_phylo_obj_fs)
+```
+
+
+# 2.0 Ordinations: Comparing Studies
+
+## 2.1 PCA 
+```{r PCA, fig.width=10, fig.height=15}
+plots <- lapply(resolution, function(rank) {
+  plot_pca(phyloseq_obj = merged_phylo_obj_f, 
+           rank_transformation = rank, 
+           variable = "Study", 
+           colors_list = colors_study)})
+
+combined_plot <- wrap_plots(plots, ncol = 2) & theme(legend.position = "bottom") 
+combined_plot
+```
+
+
+## 2.2 PCoA NMDS Bray 
+```{r PCoA_bray, fig.width=10, fig.height=15}
+plots <- lapply(resolution, function(rank) {
+  plot_PCoA(phyloseq_obj = merged_phylo_obj_f,
+    rank_transformation = rank,
+    trans_type = "identity",        
+    dist_cal_type = "bray",   
+    ord_calc_method = "NMDS",
+    variable = "Study", 
+    colors_list = colors_study)})
+
+combined_plot <- wrap_plots(plots, ncol = 2) & theme(legend.position = "bottom") 
+print(combined_plot)
+```
+
+
+## 2.3 PCoA NMDS Jaccard 
+```{r PCoA_jaccard, fig.width=10, fig.height=15}
+plots <- lapply(resolution, function(rank) {
+  plot_PCoA(phyloseq_obj = merged_phylo_obj_f,
+    rank_transformation = rank,
+    trans_type = "identity",        
+    dist_cal_type = "jaccard",   
+    ord_calc_method = "NMDS",
+        variable = "Study", 
+    colors_list = colors_study)})
+
+combined_plot <- wrap_plots(plots, ncol = 2) & theme(legend.position = "bottom") 
+print(combined_plot)
+```
+
+
+
+# 3.0 MBCES Batch correction
+https://bioconductor.org/packages/release/bioc/vignettes/MBECS/inst/doc/mbecs_vignette.html
+```{r}
+library(MBECS)
+```
+
+## 3.1 Pre-processing
+### 3.1.1 Create object
+```{r}
+run_MBCES <- function(ps_obj, clr_methods=c("bat", "svd", "pn", "bmc"), tss_methods=c( "svd", "pn", "bmc")){
+  
+  # Create a unique hash for the parameters
+  param_hash <- digest(list(ps_obj, clr_methods, tss_methods))
+  # File path for the analysis results
+  result_file <- file.path("saved_analysis_files/", paste0("mbec.obj_", param_hash, ".rds"))
+
+  if (file.exists(result_file)) {
+      message("Analysis already run. Loading results...")
+      mbec.obj <- readRDS(result_file)
+    } else {
+      message("Running analysis...")
+    
+    #Create Object
+    mbec.obj <- mbecProcessInput(ps_obj, 
+                             required.col = c("Study", "condition"))
+  
+    #Apply Transformations
+    mbec.obj <- mbecTransform(mbec.obj, method = "tss")
+    mbec.obj <- mbecTransform(mbec.obj, method = "clr", offset = 0.0001)
+    
+    #CLR prelim report
+    mbecReportPrelim(input.obj=mbec.obj, model.vars=c("Study", "condition"), type="clr")
+ 
+    #TSS prelim report
+    mbecReportPrelim(input.obj=mbec.obj, model.vars=c("Study", "condition"), type="tss")
+
+    #Run CLR
+    mbec.obj<- mbecRunCorrections(mbec.obj, model.vars=c("Study", "condition"), 
+                           method= clr_methods,
+                           type = "clr")
+    
+    #Run TSS
+    mbec.obj<- mbecRunCorrections(mbec.obj, model.vars=c("Study", "condition"), 
+                           method= tss_methods , #got an error when running "bat"
+                           type = "tss")
+    
+    #CLR Post-report
+    mbecReportPost(input.obj=mbec.obj, model.vars=c("Study", "condition"), 
+               type="clr")
+    
+    #TSS Post-report
+    mbecReportPost(input.obj=mbec.obj, model.vars=c("Study", "condition"), 
+               type="tss")
+    
+      # Save the results
+    saveRDS(mbec.obj, result_file)
+    }
+  
+    return(mbec.obj)
+}
+
+mbec.obj<- run_MBCES(merged_phylo_obj_fs)
+```
+
+### 3.1.2 Extract data
+```{r}
+ps.tss.pn <- mbecGetPhyloseq(mbec.obj, type="tss", label="pn")
+ps.clr.pn <- mbecGetPhyloseq(mbec.obj, type="clr", label="pn")
+
+ps.tss.bmc <- mbecGetPhyloseq(mbec.obj, type="tss", label="bmc")
+ps.clr.bmc <- mbecGetPhyloseq(mbec.obj, type="clr", label="bmc")
+
+ps.tss.svd <- mbecGetPhyloseq(mbec.obj, type="tss", label="svd")
+ps.clr.svd <- mbecGetPhyloseq(mbec.obj, type="clr", label="svd")
+
+```
+
+## 3.2 Compare Data: PCA
+
+### 3.2.1 TSS PN
+```{r, fig.width=10, fig.height=15}
+plots <- lapply(resolution, function(rank) {
+  plot_pca(phyloseq_obj = merged_phylo_obj_fs, 
+           rank_transformation = rank, 
+           variable = "Study", 
+           colors_list = colors_study)})
+
+combined_plot <- wrap_plots(plots, ncol = 2) & theme(legend.position = "bottom") 
+combined_plot
+```
+
+### 3.2.2 TSS BMC
+```{r, fig.width=10, fig.height=15}
+plots <- lapply(resolution, function(rank) {
+  plot_pca(phyloseq_obj = ps.tss.bmc, 
+           rank_transformation = rank, 
+           variable = "Study", 
+           colors_list = colors_study)})
+
+combined_plot <- wrap_plots(plots, ncol = 2) & theme(legend.position = "bottom") 
+combined_plot
+```
+
+### 3.2.3 TSS SVD
+```{r, fig.width=10, fig.height=15}
+plots <- lapply(resolution, function(rank) {
+  plot_pca(phyloseq_obj = ps.tss.svd, 
+           rank_transformation = rank, 
+           variable = "Study", 
+           colors_list = colors_study)})
+
+combined_plot <- wrap_plots(plots, ncol = 2) & theme(legend.position = "bottom") 
+combined_plot
+```
+
+
+# 4.0 ConqR Batch Correction
+Can't use because I don't have enough metadata elements....it wants more than one covariate 
+```{r}
+library(ConQuR)
+library(doParallel)
+```
+
+
+
+

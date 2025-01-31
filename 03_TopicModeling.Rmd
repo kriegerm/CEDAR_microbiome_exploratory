@@ -1,0 +1,325 @@
+---
+title: "03_TopicModeling"
+author: "Madeline Krieger"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    theme: "cosmo"
+    code_folding: "show"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE,
+                      warning = FALSE,
+                      error = FALSE,
+                      fig.path = "./figures/03/",
+                      fig.keep = "all",
+                      dev = c("png"),
+                      cache = FALSE,
+                      # Do not use lazy loading which fails for large objects
+                      cache.lazy = FALSE)
+```
+
+
+# 1.0 Load and Define
+
+## 1.1 Load packages and presets
+### 1.1.1 Packages
+```{r 1.1_load-packages}
+library("pacman")
+pacman::p_load("rmarkdown", "tidyverse", "phyloseq", "knitr","kableExtra", "here", "plyr", "ggpubr", "microViz", "readxl", "microbiome", "pheatmap", "vegan", "reshape2", "magrittr", "microshades", "pheatmap","vegan", "data.table", "Polychrome", "fantaxtic","cetcolor", "ldatuning", "cowplot", "MicrobiomeStat", "randomForest", "caret", "mlbench", "MLmetrics", "mia", "here", "patchwork", "digest", "ANCOMBC", "Maaslin2", "microbiomeMarker")
+
+here::i_am("03_TopicModeling.Rmd")
+
+``` 
+
+
+### 1.1.2 My packages
+```{r}
+load("MK_Microbiome_Functions.RData")
+```
+
+
+
+### 1.1.2 Colors and presents
+```{r}
+colors_all= c("Abscess" = "#FF495C", "Tumor"="#F0C808","Plaque"="#083D77", "AN"="#43AA8B" )
+plot_colors= c("Abscess" = "#FF495C", "Plaque"="#083D77","abscess" = "#FF495C", "plaque"="#083D77", 
+               "abnormal" = "#FF495C", "control"="#083D77",  "Abnormal" = "#FF495C", "Control"="#083D77"  )
+
+core_colors = c("#FAAA00", "#3399FF","#F76F8E","#083D77","#B8D4E3", "#FF495C","#477071", '#03CEA4',  "#5F00BA", "#BDAC9E", "white", "#FFD900")
+
+maaslin2_colors= c("CLR_LOG" = "#2c45b5", "CLR_NONE"="#86B8FD", 
+                   "CSS_LOG" = "#FF495C", "CSS_NONE"="#F2929A",
+                   "TMM_LOG" = "#F4B701", "TMM_NONE"="#FEE59A",
+                   "TSS_LOG" = "#8FD694", "TSS_NONE"="#D2EED4",
+                   "TSS_LOGIT" = "#354F52", "TSS_AST"="#CEDDDF")
+
+pal20 <- createPalette(22, c("#F76F8E","#03CEA4", "#083D77"), range = c(30, 80))
+pal20 <- unname(as.list(pal20))
+
+resolution <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
+
+set.seed(1234)
+date = Sys.Date()
+```
+
+
+## 1.2 Load data and process
+
+### 1.2.1 Load Data from 00
+```{r}
+# Load the saved Rds file
+loaded_objects <- readRDS("00data.rds")
+
+# Assign back the objects to the environment, if needed
+list2env(loaded_objects, .GlobalEnv)
+
+ps_obj_ped_fs <- subset_samples(merged_phylo_obj_fs, Study == "Pediatric")
+ps_obj_ped_adult_fs <- subset_samples(merged_phylo_obj_fs, Study != "OSCC")
+
+```
+
+
+# 2.0 Merged Ped and Adult
+
+## 2.1 Genus
+
+### Threshold iterations
+```{r}
+threshold_iterations <-  seq(.75, 1.02, by = .02)
+result_table <- find_thresholds_iteratively(ps_obj_ped_adult_fs, "Genus", threshold_iterations)
+result_table
+```
+
+### Find filtering threshold
+```{r}
+threshold <- find_threshold(ps_obj_ped_adult_fs, "Genus", .95)
+threshold
+```
+
+### Prep and binarize input
+```{r}
+results_threshold <- prep_data_binarize(ps_obj_ped_adult_fs, "Genus", threshold, "condition")
+meta_data <- results_threshold$meta_data
+counts_data <- results_threshold$counts_data
+```
+
+### Use FindTopicsNumber() 
+```{r}
+topics <- seq(from = 2, to = 50, by = 2)
+RunFindTopicsNumber(counts_data, topics, "Gibbs")
+```
+
+### LDA: Create the model
+```{r}
+result <- create_topic_model(counts_data, 2, 1, "Gibbs")
+model <- result$lda_model
+```
+
+### Plot beta
+```{r, fig.height=4, fig.width=10}
+plot_beta(result, 15)
+```
+
+### Heatmap of gamma scores 
+```{r, fig.height=2, fig.width=9}
+heatmap_gamma(result, "condition")
+```
+
+### UMAP of gamma scores
+```{r fig.height=4, fig.width=4}
+plot_gamma_umap(results, "condition", plot_colors)
+```
+
+###Membership of topic by Type
+```{r, fig.height=3.5, fig.width=4}
+topic_membership(result, "condition", plot_colors)
+```
+
+
+
+
+
+## 2.2 Species
+
+### Threshold iterations
+```{r}
+threshold_iterations <-  seq(.75, 1.02, by = .02)
+result_table <- find_thresholds_iteratively(ps_obj_ped_adult_fs, "Genus", threshold_iterations)
+result_table
+```
+
+### Find filtering threshold
+```{r}
+threshold <- find_threshold(ps_obj_ped_adult_fs, "Genus", .90)
+threshold
+```
+
+### Prep and binarize input
+```{r}
+results_threshold <- prep_data_binarize(ps_obj_ped_adult_fs, "Genus", threshold, "condition")
+meta_data <- results_threshold$meta_data
+counts_data <- results_threshold$counts_data
+```
+
+### Use FindTopicsNumber() 
+```{r}
+topics <- seq(from = 2, to = 50, by = 2)
+RunFindTopicsNumber(counts_data, topics, "Gibbs")
+```
+
+### LDA: Create the model
+```{r}
+result <- create_topic_model(counts_data, 2, 1, "Gibbs")
+model <- result$lda_model
+```
+
+### Plot beta
+```{r, fig.height=4, fig.width=10}
+plot_beta(result, 15)
+```
+
+### Heatmap of gamma scores 
+```{r, fig.height=2, fig.width=9}
+heatmap_gamma(result, "condition")
+```
+
+### UMAP of gamma scores
+```{r fig.height=4, fig.width=4}
+plot_gamma_umap(results, "condition", plot_colors)
+```
+
+###Membership of topic by Type
+```{r, fig.height=3.5, fig.width=4}
+topic_membership(result, "condition", plot_colors)
+```
+
+
+# 3.0 Pediatric only
+
+## Genus
+### Threshold iterations
+```{r}
+threshold_iterations <-  seq(.75, 1.02, by = .02)
+result_table <- find_thresholds_iteratively(ps_obj_ped_fs, "Genus", threshold_iterations)
+result_table
+```
+
+### Find filtering threshold
+```{r}
+threshold <- find_threshold(ps_obj_ped_fs, "Genus", .90)
+threshold
+```
+
+### Prep and binarize input
+```{r}
+results_threshold <- prep_data_binarize(ps_obj_ped_fs, "Genus", threshold, "condition")
+meta_data <- results_threshold$meta_data
+counts_data <- results_threshold$counts_data
+```
+
+### Use FindTopicsNumber() 
+```{r}
+topics <- seq(from = 2, to = 10, by = 1)
+RunFindTopicsNumber(counts_data, topics, "Gibbs")
+```
+
+### LDA: Create the model
+```{r}
+result <- create_topic_model(counts_data, 2, 1, "Gibbs")
+model <- result$lda_model
+```
+
+### Plot beta
+```{r, fig.height=4, fig.width=10}
+plot_beta(result, 15)
+```
+
+### Heatmap of gamma scores 
+```{r, fig.height=2, fig.width=9}
+heatmap_gamma(result, "condition")
+```
+
+### UMAP of gamma scores
+```{r fig.height=6, fig.width=6}
+library(umap)
+plot_gamma_umap(results, "condition", plot_colors)
+```
+
+###Membership of topic by Type
+```{r, fig.height=3.5, fig.width=4}
+topic_membership(result, "condition", plot_colors)
+```
+
+
+### Heatmap of rel abundance in original data of top taxa
+```{r, fig.height=5, fig.width=7}
+relab_heatmap(result, ps_obj_ped_fs, "Genus", "condition", 1, 10)
+```
+
+
+## Species
+### Threshold iterations
+```{r}
+threshold_iterations <-  seq(.75, 1.02, by = .02)
+result_table <- find_thresholds_iteratively(ps_obj_ped_fs, "Species", threshold_iterations)
+result_table
+```
+
+### Find filtering threshold
+```{r}
+threshold <- find_threshold(ps_obj_ped_fs, "Species", .90)
+threshold
+```
+
+### Prep and binarize input
+```{r}
+results_threshold <- prep_data_binarize(ps_obj_ped_fs, "Species", threshold, "condition")
+meta_data <- results_threshold$meta_data
+counts_data <- results_threshold$counts_data
+```
+
+### Use FindTopicsNumber() 
+```{r}
+topics <- seq(from = 2, to = 50, by = 2)
+RunFindTopicsNumber(counts_data, topics, "Gibbs")
+```
+
+### LDA: Create the model
+```{r}
+result <- create_topic_model(counts_data, 2, 1, "Gibbs")
+model <- result$lda_model
+```
+
+### Plot beta
+```{r, fig.height=4, fig.width=10}
+plot_beta(result, 15)
+```
+
+### Heatmap of gamma scores 
+```{r, fig.height=2, fig.width=9}
+heatmap_gamma(result, "condition")
+```
+
+### UMAP of gamma scores
+```{r fig.height=4, fig.width=4}
+plot_gamma_umap(results, "condition", plot_colors)
+```
+
+###Membership of topic by Type
+```{r, fig.height=3.5, fig.width=4}
+topic_membership(result, "condition", plot_colors)
+```
+
+
+### Heatmap of rel abundance in original data of top taxa
+```{r, fig.height=5, fig.width=7}
+relab_heatmap(result, ps_obj_ped_fs, "Species", "condition", 1, 10)
+```
+
+
