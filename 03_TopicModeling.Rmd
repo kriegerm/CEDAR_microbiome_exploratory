@@ -85,9 +85,103 @@ ps_obj_ped_adult_fs <- subset_samples(merged_phylo_obj_fs, Study != "OSCC")
 ```
 
 
-# 2.0 Merged Ped and Adult
+# 2.0 All three studies
 
 ## 2.1 Genus
+
+
+### Prep and scale input
+```{r, eval=FALSE}
+results_scaling <- prep_data_scale(merged_phylo_obj_fs, "Genus", 1000, "condition")
+meta_data <- results_scaling$meta_data
+counts_data <- results_scaling$counts_data
+```
+
+### Use FindTopicsNumber() 
+```{r}
+topics <- seq(from = 2, to = 50, by = 2)
+RunFindTopicsNumber(counts_data, topics, "Gibbs")
+```
+
+### LDA: Create the model
+```{r}
+result <- create_topic_model(counts_data, 2, 1, "Gibbs")
+model <- result$lda_model
+```
+
+### Plot beta
+```{r, fig.height=4, fig.width=10}
+plot_beta(result, 15)
+```
+
+### Heatmap of gamma scores 
+```{r, fig.height=2, fig.width=25}
+heatmap_gamma(result, "condition")
+```
+
+### UMAP of gamma scores
+```{r fig.height=4, fig.width=4}
+plot_gamma_umap(results, "condition", plot_colors)
+```
+
+###Membership of topic by Type
+```{r, fig.height=3.5, fig.width=4}
+topic_membership(result, "condition", plot_colors)
+```
+
+
+
+
+
+## 2.2 Species
+
+
+### Prep and scale input
+A scaling factor of 1,000 is essentially setting the cuttoff at .001
+```{r, eval=FALSE}
+results_scaling <- prep_data_scale(merged_phylo_obj_fs, "Species", 1000, "condition")
+meta_data <- results_scaling$meta_data
+counts_data <- results_scaling$counts_data
+```
+
+### Use FindTopicsNumber() 
+```{r}
+topics <- seq(from = 2, to = 50, by = 2)
+RunFindTopicsNumber(counts_data, topics, "Gibbs")
+```
+
+### LDA: Create the model
+```{r}
+result <- create_topic_model(counts_data, 2, 1, "Gibbs")
+model <- result$lda_model
+```
+
+### Plot beta
+```{r, fig.height=4, fig.width=10}
+plot_beta(result, 15)
+```
+
+### Heatmap of gamma scores 
+```{r, fig.height=2, fig.width=25}
+heatmap_gamma(result, "condition")
+```
+
+### UMAP of gamma scores
+```{r fig.height=4, fig.width=4}
+plot_gamma_umap(results, "condition", plot_colors)
+```
+
+###Membership of topic by Type
+```{r, fig.height=3.5, fig.width=4}
+topic_membership(result, "condition", plot_colors)
+```
+
+
+# 3.0 Merged Adult and Pediatric
+
+
+
+## 3.1 Genus
 
 ### Threshold iterations
 ```{r}
@@ -109,6 +203,13 @@ meta_data <- results_threshold$meta_data
 counts_data <- results_threshold$counts_data
 ```
 
+### Prep and scale input
+```{r, eval=FALSE}
+results_scaling <- prep_data_scale(ps_obj_ped_adult_fs, "Genus", 1000, "condition")
+meta_data <- results_scaling$meta_data
+counts_data <- results_scaling$counts_data
+```
+
 ### Use FindTopicsNumber() 
 ```{r}
 topics <- seq(from = 2, to = 50, by = 2)
@@ -145,12 +246,12 @@ topic_membership(result, "condition", plot_colors)
 
 
 
-## 2.2 Species
+## 3.2 Species
 
 ### Threshold iterations
 ```{r}
 threshold_iterations <-  seq(.75, 1.02, by = .02)
-result_table <- find_thresholds_iteratively(ps_obj_ped_adult_fs, "Genus", threshold_iterations)
+result_table <- find_thresholds_iteratively(ps_obj_ped_adult_fs, "Species", threshold_iterations)
 result_table
 ```
 
@@ -167,6 +268,15 @@ meta_data <- results_threshold$meta_data
 counts_data <- results_threshold$counts_data
 ```
 
+
+### Prep and scale input
+A scaling factor of 1,000 is essentially setting the cuttoff at .001
+```{r, eval=FALSE}
+results_scaling <- prep_data_scale(ps_obj_ped_adult_fs, "Species", 1000, "condition")
+meta_data <- results_scaling$meta_data
+counts_data <- results_scaling$counts_data
+```
+
 ### Use FindTopicsNumber() 
 ```{r}
 topics <- seq(from = 2, to = 50, by = 2)
@@ -200,7 +310,8 @@ topic_membership(result, "condition", plot_colors)
 ```
 
 
-# 3.0 Pediatric only
+
+# 4.0 Pediatric only
 
 ## Genus
 ### Threshold iterations
@@ -217,21 +328,30 @@ threshold
 ```
 
 ### Prep and binarize input
-```{r}
+```{r, eval=FALSE}
 results_threshold <- prep_data_binarize(ps_obj_ped_fs, "Genus", threshold, "condition")
 meta_data <- results_threshold$meta_data
 counts_data <- results_threshold$counts_data
 ```
+### Prep and scale input
+```{r, eval=FALSE}
+results_scaling <- prep_data_scale(ps_obj_ped_fs, "Genus", 100, "condition")
+meta_data <- results_scaling$meta_data
+counts_data <- results_scaling$counts_data
+```
+
 
 ### Use FindTopicsNumber() 
+Note: There is no alpha value here
 ```{r}
 topics <- seq(from = 2, to = 10, by = 1)
 RunFindTopicsNumber(counts_data, topics, "Gibbs")
 ```
 
 ### LDA: Create the model
+NOTE: Change the number of topics and create a perplexity elbow plot
 ```{r}
-result <- create_topic_model(counts_data, 2, 1, "Gibbs")
+result <- create_topic_model(counts_data, 2, TRUE, "Gibbs")
 model <- result$lda_model
 ```
 
@@ -259,7 +379,7 @@ topic_membership(result, "condition", plot_colors)
 
 ### Heatmap of rel abundance in original data of top taxa
 ```{r, fig.height=5, fig.width=7}
-relab_heatmap(result, ps_obj_ped_fs, "Genus", "condition", 1, 10)
+relab_heatmap(result, ps_obj_ped_fs, "Genus", "condition", 1, 15)
 ```
 
 
@@ -284,6 +404,13 @@ meta_data <- results_threshold$meta_data
 counts_data <- results_threshold$counts_data
 ```
 
+### Prep and scale input
+```{r, eval=FALSE}
+results_scaling <- prep_data_scale(ps_obj_ped_fs, "Species", 100, "condition")
+meta_data <- results_scaling$meta_data
+counts_data <- results_scaling$counts_data
+```
+
 ### Use FindTopicsNumber() 
 ```{r}
 topics <- seq(from = 2, to = 50, by = 2)
@@ -297,7 +424,7 @@ model <- result$lda_model
 ```
 
 ### Plot beta
-```{r, fig.height=4, fig.width=10}
+```{r, fig.height=5, fig.width=12}
 plot_beta(result, 15)
 ```
 

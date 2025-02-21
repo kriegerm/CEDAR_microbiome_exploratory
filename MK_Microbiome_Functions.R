@@ -1,39 +1,12 @@
----
-title: "Microbiome Functions"
-author: "Madeline Krieger"
-date: "`r Sys.Date()`"
-output:
-  html_document:
-    toc: true
-    toc_float:
-      collapsed: false
-      smooth_scroll: true
-    theme: "cosmo"
-    code_folding: "show"
----
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(message = FALSE,
-                      warning = FALSE,
-                      error = FALSE,
-                      cache = FALSE,
-                      # Do not use lazy loading which fails for large objects
-                      cache.lazy = FALSE)
-```
-
-
-
-
-```{r load-packages}
 library("pacman")
-pacman::p_load("rmarkdown", "tidyverse", "phyloseq", "knitr","kableExtra", "here", "plyr", "ggpubr", "microViz", "readxl", "microbiome", "pheatmap", "vegan", "DirichletMultinomial", "reshape2", "magrittr", "microshades", "pheatmap","vegan", "data.table", "Polychrome", "fantaxtic","cetcolor", "topicmodels", "ldatuning", "cowplot", "MicrobiomeStat", "randomForest", "caret", "mlbench", "MLmetrics", "mia", "here", "patchwork", "ancombc2")
+pacman::p_load("tidyverse")
 
 set.seed(1234)
 date = Sys.Date()
-``` 
+ 
 
-Make output directory for data saved from functions
-```{r}
+#Make output directory for data saved from functions
 # Specify the directory path
 dir_path <- "saved_analysis_files"
 
@@ -45,22 +18,22 @@ if (!dir.exists(dir_path)) {
 } else {
   message("Directory already exists: ", dir_path)
 }
-```
+
 
 
 # Data Processing
 
 ## Construct phyloseq function
 
-Example:
+#Example:
+#Define variables and file locations
+#biom_location <- "PRJNA822685_OSCC/Qiime2/blast/Files_For_Phyloseq/feature_table_w_taxonomy.biom"
+#tree_location <- "PRJNA822685_OSCC/Qiime2/Tree/Unfiltered_Rooted_tree_for_phyloseq/tree.nwk"
+#sampledata_location <- "PRJNA822685_OSCC/Qiime2/Files_For_Phyloseq/metadata_phyloseq.tsv"
 
-Define variables and file locations
-biom_location <- "PRJNA822685_OSCC/Qiime2/blast/Files_For_Phyloseq/feature_table_w_taxonomy.biom"
-tree_location <- "PRJNA822685_OSCC/Qiime2/Tree/Unfiltered_Rooted_tree_for_phyloseq/tree.nwk"
-sampledata_location <- "PRJNA822685_OSCC/Qiime2/Files_For_Phyloseq/metadata_phyloseq.tsv"
+#construct_phyloseq("phy_obj_oscc", biom_location, tree_location, sampledata_location)
 
-construct_phyloseq("phy_obj_oscc", biom_location, tree_location, sampledata_location)
-```{r define_construct_phyloseq}
+
 construct_phyloseq <- function(phyloseq_object_name, biom_location, tree_location, sampledata_location) {
   # Validate inputs
   if (!file.exists(biom_location)) stop("The biom file does not exist.")
@@ -105,10 +78,10 @@ construct_phyloseq <- function(phyloseq_object_name, biom_location, tree_locatio
   # Assign the object to the global environment to output
   assign(phyloseq_object_name, phylo_obj, envir = .GlobalEnv)
 }
-```
+
 
 ## Pediatric: Filter for unmatched samples
-```{r define_filter_unmatched_samples}
+
 #This function is used inside the function filter_phyloseq
 filter_unmatched_samples_Pediatric <- function(phyloseq_obj) {
   # Extract the sample data
@@ -146,10 +119,9 @@ filter_unmatched_samples_Pediatric <- function(phyloseq_obj) {
   
   return(filtered_phyloseq_obj)
 }
-```
+
 
 ## Filter for unmatched samples
-```{r}
 #This function is used inside the function filter_phyloseq
 filter_unmatched_samples <- function(phyloseq_obj) {
   # Extract the sample data
@@ -181,16 +153,14 @@ filter_unmatched_samples <- function(phyloseq_obj) {
   return(filtered_phyloseq_obj)
 
 }
-```
+
 
 
 
 ## Filter phyloseq function
-Example:
+#Example:
+#filter_phyloseq(phy_obj_oscc, "OSCC", Contam_g, Contam_f, Contam_s)
 
-filter_phyloseq(phy_obj_oscc, "OSCC", Contam_g, Contam_f, Contam_s)
-
-```{r define_filter_phyloseq}
 filter_phyloseq <- function(phylo_obj, study, Contam_g, Contam_f, Contam_s) {
   # Capture the name of the input variable
   phylo_name <- deparse(substitute(phylo_obj))
@@ -238,11 +208,10 @@ filter_phyloseq <- function(phylo_obj, study, Contam_g, Contam_f, Contam_s) {
 }
 
 
-```
+
 
 
 ## Process Phyloseq
-```{r define_process_phyloseq}
 process_phyloseq <- function(phylo_obj_fs) {
   
   # Capture the name of the input variable
@@ -279,15 +248,14 @@ process_phyloseq <- function(phylo_obj_fs) {
   assign(paste0(phylo_name, "_species_csv"), species_csv, envir = .GlobalEnv)
   assign(paste0(phylo_name, "_genus_csv"), genus_csv, envir = .GlobalEnv)
 }
-```
+
 
 #Basic Taxa Plots
 
 ## Plot all taxa
-Example: 
+#Example: 
+#plot_all_taxa(ps_obj_ped_fs, "TSS", "condition", "Genus", "dot", plot_colors)
 
-plot_all_taxa(ps_obj_ped_fs, "TSS", "condition", "Genus", "dot", plot_colors)
-```{r}
 plot_all_taxa <- function(ps_obj, transformation, group, taxa_level, plot_type, plot_colors) {
   
   if (transformation == "counts") {
@@ -362,25 +330,23 @@ plot_all_taxa <- function(ps_obj, transformation, group, taxa_level, plot_type, 
   }
   print(plot)
 }
-```
+
 
 
 # Oridinations 
 ## Plot PCA
 
-Example (to iterate through a list of ranks):
+#Example (to iterate through a list of ranks):
+#resolution <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
 
-resolution <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
+#plots <- lapply(resolution, function(rank) {
+#  plot_pca(phyloseq_obj = merged_phylo_obj_f, 
+#           rank_transformation = rank, 
+#           variable = "Study", 
+#           colors_list = colors_study)})
 
-plots <- lapply(resolution, function(rank) {
-  plot_pca(phyloseq_obj = merged_phylo_obj_f, 
-           rank_transformation = rank, 
-           variable = "Study", 
-           colors_list = colors_study)})
+#combined_plot <- wrap_plots(plots, ncol = 2) & theme(legend.position = "bottom") 
 
-combined_plot <- wrap_plots(plots, ncol = 2) & theme(legend.position = "bottom") 
-combined_plot
-```{r}
 # Function to create plots
 plot_pca <- function(phyloseq_obj, rank_transformation, variable, colors_list=NULL) {
   # Transform and calculate distance
@@ -409,26 +375,23 @@ plot_pca <- function(phyloseq_obj, rank_transformation, variable, colors_list=NU
   return(p)
 }
 
-```
+
 
 ## Plot PCoA
 
-Example (to iterate through a list of ranks):
-
-resolution <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
-
-plots <- lapply(resolution, function(rank) {
-  plot_PCoA(phyloseq_obj = merged_phylo_obj_f,
-    rank_transformation = rank,
-    trans_type = "identity",        
-    dist_cal_type = "bray",   
-    ord_calc_method = "NMDS",
-    variable = "Study", 
-    colors_list = colors_study)})
+#Example (to iterate through a list of ranks):
+#resolution <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
+#plots <- lapply(resolution, function(rank) {
+#  plot_PCoA(phyloseq_obj = merged_phylo_obj_f,
+#    rank_transformation = rank,
+#    trans_type = "identity",        
+#    dist_cal_type = "bray",   
+#    ord_calc_method = "NMDS",
+#    variable = "Study", 
+#    colors_list = colors_study)})
     
-combined_plot <- wrap_plots(plots, ncol = 2) & theme(legend.position = "bottom") 
-print(combined_plot)
-```{r}
+#combined_plot <- wrap_plots(plots, ncol = 2) & theme(legend.position = "bottom") 
+
 # Function to create plots
 plot_PCoA <- function(phyloseq_obj, rank_transformation, trans_type, dist_cal_type, ord_calc_method, variable, colors_list=NULL) {
   # Transform and calculate distance
@@ -459,7 +422,7 @@ plot_PCoA <- function(phyloseq_obj, rank_transformation, trans_type, dist_cal_ty
   return(p)
 
 }
-```
+
 
 
 # DA Analyses
@@ -467,18 +430,18 @@ plot_PCoA <- function(phyloseq_obj, rank_transformation, trans_type, dist_cal_ty
 ## Maaslin2
 
 ### Run Maaslin2
-Example:
-run_Maaslin2(ps_obj = ps_obj_ped_fs, 
-                                 taxa_level = "Genus", 
-                                 group = "condition",
-                                 analysis_method = "NEGBIN", 
-                                 normalization = "TMM",
-                                 transform = "NONE", 
-                                 plot_colors = plot_colors,
-                                 plot_type = "box", 
-                                 qval_threshold= 0.1, 
-                                 plot_heights = c(2, 9))
-```{r}
+#Example:
+#run_Maaslin2(ps_obj = ps_obj_ped_fs, 
+#                                 taxa_level = "Genus", 
+#                                 group = "condition",
+#                                 analysis_method = "NEGBIN", 
+#                                 normalization = "TMM",
+#                                 transform = "NONE", 
+#                                 plot_colors = plot_colors,
+#                                 plot_type = "box", 
+#                                 qval_threshold= 0.1, 
+#                                 plot_heights = c(2, 9))
+
 run_Maaslin2 <- function(ps_obj, taxa_level, group, analysis_method, normalization, transform, plot_colors, plot_type, qval_threshold, plot_heights){
   
   # Create a unique hash for the parameters
@@ -636,19 +599,19 @@ run_Maaslin2 <- function(ps_obj, taxa_level, group, analysis_method, normalizati
     print(layout)
     
   }
-```
+
 
 ### Iterate Maaslin2 Params
-Example:
-resolutions <- c("Species", "Genus", "Phylum")
-iterate_maaslin2(ps_obj = ps_obj_ped_fs, 
-                 iterative_methods = iterative_methods,
-                 resolutions = resolutions,
-                 group = "condition",
-                 qval_threshold = .25, 
-                 plot_colors = maaslin2_colors,
-                 percentage=TRUE)
-```{r}
+#Example:
+#resolutions <- c("Species", "Genus", "Phylum")
+#iterate_maaslin2(ps_obj = ps_obj_ped_fs, 
+#                 iterative_methods = iterative_methods,
+#                 resolutions = resolutions,
+#                 group = "condition",
+#                 qval_threshold = .25, 
+#                 plot_colors = maaslin2_colors,
+#                 percentage=TRUE)
+
 iterate_maaslin2 <- function(ps_obj, iterative_methods, resolutions, group, qval_threshold, plot_colors, percentage) {
   
   # Define the options for each parameter
@@ -833,44 +796,26 @@ iterate_maaslin2 <- function(ps_obj, iterative_methods, resolutions, group, qval
   }
     print(p)
     
-    
-  ##Plot overlapping taxa - STILL WORKING ON THIS
-  #overlapping <- summary_table_features_list %>%
-    #filter(method %in% c("Genus_LM_TSS_LOG", "Genus_LM_TSS_AST", "Genus_LM_TMM_LOG", "Genus_LM_CSS_LOG", "Genus_LM_CLR_NONE"))
-  ## Create the list where 'name' is the key and 'value' is the list
-  #result <- overlapping %>%
-  #  group_by(method) %>%
-  #  summarize(value_list = list(features_list)) %>%
-  #  deframe()
-  ## Find overlapping elements across all lists
-  #overlap_elements <- Reduce(intersect, result)
-  ## Find unique elements in each list
-  #unique_elements <- sapply(result, function(x) setdiff(x, unlist(overlap_elements)))
-  ## Print the results
-  #print("Unique elements per list:")
-  #print(unique_elements)
-
-  }
+}
 
 
 
-```
+
+
 
 
 ## ANCOM
 
 ### Run ANCOM
-Example:
+#Example:
 
-runANCOM(merged_phylo_obj_fs, 
-         tax_level = "Genus", 
-         group = "condition", 
-         Log2FC_cutoff = 1, 
-         name_of_saved_results = "ancombc_results_genus", 
-         plot_type = "dot", 
-         plot_heights = c(1, 8))
-
-```{r, fig.width=10, fig.height=20}
+#runANCOM(merged_phylo_obj_fs, 
+#         tax_level = "Genus", 
+#         group = "condition", 
+#         Log2FC_cutoff = 1, 
+#         name_of_saved_results = "ancombc_results_genus", 
+#         plot_type = "dot", 
+#         plot_heights = c(1, 8))
 
 runANCOM <- function(ps_obj, tax_level, group, Log2FC_cutoff=NULL, name_of_saved_results=NULL, plot_type, plot_heights, plot_colors){
   
@@ -1130,13 +1075,11 @@ runANCOM <- function(ps_obj, tax_level, group, Log2FC_cutoff=NULL, name_of_saved
   plot_layout(heights = plot_heights) 
   layout
 }
-```
+
 
 ## ALDEX2
 
 ### Iterate ALDEX
-```{r}
-
 iterate_aldex2 <- function(ps_obj, iterative_methods, resolutions, group, plot_colors, percentage) {
   
   #p_adjusts = c("none", "fdr", "bonferroni", "holm", "hochberg", "hommel", "BH", "BY")
@@ -1339,10 +1282,10 @@ iterate_aldex2 <- function(ps_obj, iterative_methods, resolutions, group, plot_c
   
 }
 
-```
+
 
 ### Run Aldex
-```{r}
+
 
 run_aldex2 <- function(ps_obj, group, tax_rank, method, transform, normalization){
 
@@ -1401,10 +1344,10 @@ run_aldex2 <- function(ps_obj, group, tax_rank, method, transform, normalization
   layout
   
 }
-```
+
 
 ## Combine DA Methods
-```{r}
+
 combine_DA <- function(maaslin2_results, ancombc2_results, aldex2_results, group, tax_level, plot_heights){
 
     # Prepare the two dataframes for merging
@@ -1520,14 +1463,14 @@ combine_DA <- function(maaslin2_results, ancombc2_results, aldex2_results, group
     print(layout)
 }
 
-```
+
 
 #LDA model function
 
 ### Iteratively find thresholds
-threshold_iterations <-  seq(.5, 1, by = .05)
-result_table <- find_thresholds_iteratively(ps_obj_ped_fs, "Genus", threshold_iterations)
-```{r}
+#threshold_iterations <-  seq(.5, 1, by = .05)
+#result_table <- find_thresholds_iteratively(ps_obj_ped_fs, "Genus", threshold_iterations)
+
 find_thresholds_iteratively <- function(psobj, rank, required_percent_taxa_seq) {
   
   # Initialize an empty data frame to store results
@@ -1589,14 +1532,13 @@ find_thresholds_iteratively <- function(psobj, rank, required_percent_taxa_seq) 
   # Return the final results table
   return(results)
 }
-```
+
 
 
 ### Find filtering threshold - set value
 
-threshold <- find_threshold(ps_obj_ped_fs, "Genus", .95)
-threshold
-```{r}
+#threshold <- find_threshold(ps_obj_ped_fs, "Genus", .95)
+
 
 find_threshold <- function(psobj, rank, required_percent_taxa){
 
@@ -1635,18 +1577,16 @@ find_threshold <- function(psobj, rank, required_percent_taxa){
         return(threshold)
 }
 
-``` 
+ 
 
 
 
 ### Prep and binarize input
-This works for all topic modeling algorithms as a pre-processing step
+#This works for all topic modeling algorithms as a pre-processing step
+#results_threshold <- prep_data_binarize(ps_obj_ped_fs, "Genus", threshold)
+#meta_data <- results_threshold$meta_data
+#counts_data <- results_threshold$counts_data
 
-
-results_threshold <- prep_data_binarize(ps_obj_ped_fs, "Genus", threshold)
-meta_data <- results_threshold$meta_data
-counts_data <- results_threshold$counts_data
-```{r}
 #Prepare data from phyloseq object and binarize at a certain threshold of relative abundance
 prep_data_binarize <- function(phy_obj, taxa_level, binarization_threshold, type_column){
   # Extract metadata
@@ -1703,19 +1643,77 @@ prep_data_binarize <- function(phy_obj, taxa_level, binarization_threshold, type
   
 }
 
-```
+
+
+##Prep data and convert to whole number by factor
+
+#Prepare data from phyloseq object and binarize at a certain threshold of relative abundance
+prep_data_scale <- function(phy_obj, taxa_level, scaling_factor, type_column){
+  # Extract metadata
+  meta_data <- phy_obj@sam_data %>% 
+    as.matrix() %>% as.data.frame() %>% 
+    dplyr::select(c(type_column, "Sample"))
+
+  #Create Relative Abundance Table
+  counts_data <- tax_glom(phy_obj, taxa_level) %>%
+    norm_tss(.) %>% 
+    psmelt(.)  %>%
+    dplyr::select(c("Sample", "Abundance", taxa_level)) %>%
+    pivot_wider(names_from = taxa_level, values_from = "Abundance") %>%
+    column_to_rownames(var="Sample") %>%
+    mutate(across(where(is.numeric), ~ round(. * scaling_factor))) # Multiply and round
+
+  # Extract row names
+  row_names <- rownames(counts_data)
+  
+  # Convert columns to integer
+  counts_data <- as.data.frame(lapply(counts_data, as.integer))
+  
+  # Reassign row names
+  rownames(counts_data) <- row_names
+  
+
+  #Reformat data into long format
+  counts_data_long <- counts_data %>%
+    pivot_longer(
+      cols = everything(), 
+      names_to = "taxa", 
+      values_to = "Count"
+    )
+  
+  #Create a histogram
+  p <- ggplot(counts_data_long, aes(x = Count)) +
+    geom_histogram(binwidth = 0.5, fill = "blue", color = "black", alpha = 0.7) +
+    labs(title = "Histogram of Values", x = "Value", y = "Frequency") +
+    stat_bin(
+        binwidth = 0.5,
+        aes(label = after_stat(count)),
+        geom = "text",
+        vjust = -0.5, # Adjust the vertical position of the text
+        color = "black",
+        size = 3
+    ) +
+    theme_bw()
+  
+  print(p)
+  
+  
+  # Return metadata and counts data as a named list
+  return(list(meta_data = meta_data, counts_data = counts_data))
+  
+}
+
+
 
 
 ### Use FindTopicsNumber() 
-Calculates different metrics to estimate the most preferable number of topics for LDA model.
-CaoJuan2009: https://www.sciencedirect.com/science/article/pii/S092523120800372X
-Arun2010: https://link.springer.com/chapter/10.1007/978-3-642-13657-3_43
+#alculates different metrics to estimate the most preferable number of topics for LDA model.
+#CaoJuan2009: https://www.sciencedirect.com/science/article/pii/S092523120800372X
+#Arun2010: https://link.springer.com/chapter/10.1007/978-3-642-13657-3_43
 
-Questions: How does this relate to perplexity? What about alpha values?
+#topics <- seq(from = 2, to = 50, by = 2)
+#RunFindTopicsNumber(counts_data, topics, "Gibbs")
 
-topics <- seq(from = 2, to = 50, by = 2)
-RunFindTopicsNumber(counts_data, topics, "Gibbs")
-```{r}
 RunFindTopicsNumber <- function(counts_data, topics, method){ 
   result <- FindTopicsNumber(
       counts_data,
@@ -1728,37 +1726,36 @@ RunFindTopicsNumber <- function(counts_data, topics, method){
     ) 
   FindTopicsNumber_plot(result)
 }
-```
+
 
 
 
 ### LDA: Create the model
-Using LDA to create the topic model 
-https://bookdown.org/josephine_lukito/j381m_tutorial/ldatm.html
+#Using LDA to create the topic model 
+#https://bookdown.org/josephine_lukito/j381m_tutorial/ldatm.html
 
-result <- create_topic_model(counts_data, 2, 1, "Gibbs")
+#result <- create_topic_model(counts_data, 2, 1, "Gibbs")
+#model <- result$lda_model
 
-model <- result$lda_model
-```{r}
 #CREATE THE MODEL
 create_topic_model <- function(counts_data, k_value, alpha, method){
   
-    lda_model <- topicmodels::LDA(counts_data, k = k_value, method = method, control = list(seed = 1234, alpha=alpha))
+    lda_model <- topicmodels::LDA(counts_data, k = k_value, method = method, 
+                                  control = list(seed = 1234)) #alpha=alpha add this in if you want to control alpha
     print(paste0("Perplexity is: ", topicmodels::perplexity(lda_model, newdata=as.matrix(counts_data))))
     
     b_df <- data.frame(tidytext::tidy(lda_model, matrix = "beta"))
     g_df <- data.frame(tidytext::tidy(lda_model, matrix = "gamma")) %>%
         arrange(document, topic)
     print(paste0("Alpha value is: ", lda_model@alpha))
-  
+
     return(list(lda_model = lda_model, b_df = b_df, g_df=g_df))
 }
-```
+
 
 
 ### Plot beta
-plot_beta(result, 15)
-```{r}
+#plot_beta(result, 15)
 #Plot beta, or the numbers that are assigned to each word in a topic. If the beta score is higher, the word matters more in that topic.
 
 plot_beta <- function(lda_result, n_top_topics){
@@ -1775,12 +1772,12 @@ plot_beta <- function(lda_result, n_top_topics){
       facet_wrap(~ topic, scales = "free") + 
       coord_flip() + theme_bw() + scale_fill_viridis_d()
 }
-```
+
 
 
 ### Heatmap of gamma scores 
-heatmap_gamma(result)
-```{r}
+#heatmap_gamma(result)
+
 #If you view the topics_wide data frame, you can see that each document has a gamma score for each topic. Some gamma scores are larger than others. This suggests that a document’s content is predominantly in one topic as opposed to another.
 
 heatmap_gamma <- function(lda_results, type_column){
@@ -1819,14 +1816,14 @@ heatmap_gamma <- function(lda_results, type_column){
 }
 
 
-```
+
 
 
 ### UMAP of gamma scores
-type_colors <- c("Abscess" = "red", "Plaque" = "blue")
-plot_gamma_umap(results, "Type", type_colors)
+#type_colors <- c("Abscess" = "red", "Plaque" = "blue")
+#plot_gamma_umap(results, "Type", type_colors)
 
-```{r}
+
 plot_gamma_umap <- function(lda_results, type_column, type_colors ){
     topics_wide <- result$g_df %>%
           pivot_wider(names_from = topic,
@@ -1857,10 +1854,10 @@ plot_gamma_umap <- function(lda_results, type_column, type_colors ){
          ylab = "UMAP 2", 
          main = "UMAP Visualization")
 }
-```
+
 
 ###Membership of topic by Type
-```{r}
+
 topic_membership <- function(lda_result, type_column, colors){
   
       topics_wide <- lda_result$g_df %>%
@@ -1882,13 +1879,13 @@ topic_membership <- function(lda_result, type_column, colors){
         labs(x = "topic", y = expression(gamma)) +
         theme_bw()
 }
-```
+
 
 
 
 ### Heatmap of rel abundance in original data of top taxa
-This is throwing an error with some ps objects, so I need to troubleshoot
-```{r}
+#This is throwing an error with some ps objects, so I need to troubleshoot
+
 relab_heatmap <- function(lda_results, psobj, rank, type_column, topic_no, n_top_words){
 
     #Gather a list of all the most important taxa(words) in the topic
@@ -1931,37 +1928,7 @@ relab_heatmap <- function(lda_results, psobj, rank, type_column, topic_no, n_top
               show_rownames = TRUE,        # Show row names
               show_colnames = FALSE,    
              main = paste0("Topic ", topic_no)
-            )  
-
+    )  
 }
 
-```
-
-#Save
-```{r}
-save(construct_phyloseq,
-     filter_phyloseq,
-     filter_unmatched_samples,
-     process_phyloseq, 
-     plot_all_taxa,
-     plot_pca, 
-     plot_PCoA, 
-     runANCOM,
-     run_Maaslin2,
-     iterate_maaslin2,
-     iterate_aldex2,
-     run_aldex2,
-     combine_DA,
-     find_thresholds_iteratively,
-     find_threshold,
-     prep_data_binarize,
-     RunFindTopicsNumber,
-     create_topic_model,
-     plot_beta,
-     heatmap_gamma,
-     plot_gamma_umap,
-     topic_membership,
-     relab_heatmap,
-     file = "MK_Microbiome_Functions.RData")
-```
 

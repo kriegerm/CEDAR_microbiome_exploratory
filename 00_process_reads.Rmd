@@ -1,5 +1,5 @@
 ---
-title: "00 process three study data"
+title: "Process reads"
 author: "Madeline Krieger"
 date: "`r Sys.Date()`"
 output:
@@ -39,8 +39,7 @@ here::i_am("three_study_comp.Rmd")
 
 ### 1.1.2 My packages
 ```{r}
-load("MK_Microbiome_Functions.RData")
-
+source("MK_Microbiome_Functions.R")
 ```
 
 
