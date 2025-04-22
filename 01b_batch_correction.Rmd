@@ -40,7 +40,7 @@ here::i_am("01b_batch_correction.Rmd")
 
 ### 1.1.2 My packages
 ```{r}
-load("MK_Microbiome_Functions.RData")
+source("MK_Microbiome_Functions.R")
 ```
 
 

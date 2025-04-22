@@ -1,0 +1,115 @@
+2025-01-31 13:38:03.216101 INFO::Writing function arguments to log file
+2025-01-31 13:38:03.217252 DEBUG::Function arguments
+2025-01-31 13:38:03.218678 DEBUG::Output folder: 2025-01-31maaslin2_output
+2025-01-31 13:38:03.218972 DEBUG::Min Abundance: 0.000000
+2025-01-31 13:38:03.219337 DEBUG::Min Prevalence: 0.100000
+2025-01-31 13:38:03.219875 DEBUG::Normalization: CSS
+2025-01-31 13:38:03.220164 DEBUG::Transform: LOG
+2025-01-31 13:38:03.220419 DEBUG::Analysis method: LM
+2025-01-31 13:38:03.220683 DEBUG::Max significance: 0.250000
+2025-01-31 13:38:03.220957 DEBUG::Random effects:
+2025-01-31 13:38:03.221224 DEBUG::Fixed effects: condition
+2025-01-31 13:38:03.221494 DEBUG::Correction method: BH
+2025-01-31 13:38:03.221751 DEBUG::Standardize: TRUE
+2025-01-31 13:38:03.222006 DEBUG::Cores: 1
+2025-01-31 13:38:03.22295 INFO::Verifying options selected are valid
+2025-01-31 13:38:03.224636 INFO::Determining format of input files
+2025-01-31 13:38:03.226402 INFO::Input format is data samples as rows and metadata samples as rows
+2025-01-31 13:38:03.228345 DEBUG::A total of 50 samples were found in both the data and metadata
+2025-01-31 13:38:03.228606 DEBUG::Reordering data/metadata to use same sample ordering
+2025-01-31 13:38:03.229565 INFO::Formula for fixed effects: expr ~  condition
+2025-01-31 13:38:03.234163 INFO::Filter data based on min abundance and min prevalence
+2025-01-31 13:38:03.234832 INFO::Total samples in data: 50
+2025-01-31 13:38:03.235374 INFO::Min samples required with min abundance for a feature not to be filtered: 5.000000
+2025-01-31 13:38:03.236881 INFO::Total filtered features: 115
+2025-01-31 13:38:03.23761 INFO::Filtered feature names from abundance and prevalence filtering: g__Parascardovia, g__Fannyhessea, g__Butyrivibrio, g__Filifactor, g__Klebsiella, g__Alloiococcus, g__Pseudoramibacter, g__Desulfobulbus, g__Cloacibacterium, g__Lachnospiraceae_.G.8., g__Colibacter, g__Shuttleworthia, g__Microbacterium, g__Bulleidia, g__Peptoniphilus, g__Brucella, g__Roseomonas, g__Peptostreptococcaceae_.G.5., g__Lentilactobacillus, g__Anaeroglobus, g__Bosea, g__Lawsonella, g__Peptostreptococcaceae_.G.6., g__Centipeda, g__Eggerthia, g__Lachnospiraceae_.G.7., g__Saccharibacteria_.TM7._.G.4., g__Bacteroides, g__Dietzia, g__Simonsiella, g__Anaerococcus, g__Mycolicibacterium, g__Ligilactobacillus, g__Mitsuokella, g__Desulfovibrio, g__Erysipelotrichaceae_.G.1., g__Anaerolineae_.G.1., g__Ruminococcaceae_.G.2., g__Ralstonia, g__Aeriscardovia, g__Kocuria, g__Clostridiales_.F.1..G.1., g__Paenibacillus, g__Paracoccus, g__Saccharibacteria_.TM7._.G.5., g__Peptostreptococcaceae_.G.2., g__Cutibacterium, g__Janibacter, g__Propionibacteriaceae_.G.2., g__Fastidiosipila, g__Clostridiales_.F.1..G.2., g__Listeria, g__Pedobacter, g__Mesorhizobium, g__Gracilibacteria_.GN02._.G.2., g__Propionibacteriaceae_.G.1., g__Erysipelothrix, g__Enterobacter, g__Saccharibacteria_.TM7._.G.2., g__Enterococcus, g__Peptoniphilaceae_.G.3., g__Serratia, g__Sneathia, g__Pyramidobacter, g__Peptoniphilaceae_.G.1., g__Syntrophomonadaceae_.VIII..G.1., g__Peptostreptococcaceae_.G.8., g__Brevundimonas, g__Phocaeicola, g__Erythrobacter, g__Jonquetella, g__Mollicutes_.G.2., g__Yersinia, g__Peptoniphilaceae_.G.2., g__Mycoplasmopsis, g__Oryzomicrobium, g__Mollicutes_.G.1., g__Olegusella, g__Lachnospiraceae_.G.10., g__Desulfomicrobium, g__Achromobacter, g__Peptostreptococcaceae_.G.3., g__Bdellovibrio, g__Caldilinea, g__Helicobacter, g__Segetibacter, g__Neisseriaceae_.G.1., g__Bartonella, g__Lactococcus, g__Chryseobacterium, g__Proteus, g__Mobiluncus, g__Odoribacter, g__Finegoldia, g__Kluyvera, g__Gardnerella, g__Aerococcus, g__Alloscardovia, g__Dermabacter, g__Haematobacter, g__Sanguibacter, g__Atopobium, g__Saccharibacteria_.TM7._.G.8., g__Lysinibacillus, g__Aquamicrobium, g__Methanobrevibacter, g__Brevibacterium, g__Eggerthella, g__Candidatus_Saccharimonas, g__Chlamydia, g__Ruminococcaceae_.G.3., g__Dolosigranulum, g__Bacteroidetes_.G.7., g__Saccharibacteria_.TM7._.G.7., g__Enhydrobacter
+2025-01-31 13:38:03.239138 INFO::Total filtered features with variance filtering: 0
+2025-01-31 13:38:03.239731 INFO::Filtered feature names from variance filtering:
+2025-01-31 13:38:03.240341 INFO::Running selected normalization method: CSS
+2025-01-31 13:38:03.261366 INFO::Applying z-score to standardize continuous metadata
+2025-01-31 13:38:03.264656 INFO::Running selected transform method: LOG
+2025-01-31 13:38:03.267061 INFO::Running selected analysis method: LM
+2025-01-31 13:38:03.268237 INFO::Fitting model to feature number 1, g__Streptococcus
+2025-01-31 13:38:03.271089 INFO::Fitting model to feature number 2, g__Lautropia
+2025-01-31 13:38:03.27384 INFO::Fitting model to feature number 3, g__Fusobacterium
+2025-01-31 13:38:03.276125 INFO::Fitting model to feature number 4, g__Neisseria
+2025-01-31 13:38:03.278184 INFO::Fitting model to feature number 5, g__Leptotrichia
+2025-01-31 13:38:03.28327 INFO::Fitting model to feature number 6, g__Prevotella
+2025-01-31 13:38:03.285673 INFO::Fitting model to feature number 7, g__Capnocytophaga
+2025-01-31 13:38:03.287584 INFO::Fitting model to feature number 8, g__Veillonella
+2025-01-31 13:38:03.289501 INFO::Fitting model to feature number 9, g__Treponema
+2025-01-31 13:38:03.291643 INFO::Fitting model to feature number 10, g__Bacteroidales_.G.2.
+2025-01-31 13:38:03.293514 INFO::Fitting model to feature number 11, g__Haemophilus
+2025-01-31 13:38:03.297033 INFO::Fitting model to feature number 12, g__Abiotrophia
+2025-01-31 13:38:03.299517 INFO::Fitting model to feature number 13, g__Parvimonas
+2025-01-31 13:38:03.302076 INFO::Fitting model to feature number 14, g__Peptostreptococcus
+2025-01-31 13:38:03.304346 INFO::Fitting model to feature number 15, g__Lactobacillus
+2025-01-31 13:38:03.307431 INFO::Fitting model to feature number 16, g__Gemella
+2025-01-31 13:38:03.313348 INFO::Fitting model to feature number 17, g__Porphyromonas
+2025-01-31 13:38:03.315245 INFO::Fitting model to feature number 18, g__Selenomonas
+2025-01-31 13:38:03.316979 INFO::Fitting model to feature number 19, g__Tannerella
+2025-01-31 13:38:03.32009 INFO::Fitting model to feature number 20, g__Campylobacter
+2025-01-31 13:38:03.322835 INFO::Fitting model to feature number 21, g__Dialister
+2025-01-31 13:38:03.325216 INFO::Fitting model to feature number 22, g__Flavitalea
+2025-01-31 13:38:03.329757 INFO::Fitting model to feature number 23, g__Clostridiales_.F.3..G.1.
+2025-01-31 13:38:03.331542 INFO::Fitting model to feature number 24, g__Solobacterium
+2025-01-31 13:38:03.334417 INFO::Fitting model to feature number 25, g__Saccharibacteria_.TM7._.G.1.
+2025-01-31 13:38:03.336108 INFO::Fitting model to feature number 26, g__Cardiobacterium
+2025-01-31 13:38:03.337703 INFO::Fitting model to feature number 27, g__Alloprevotella
+2025-01-31 13:38:03.339327 INFO::Fitting model to feature number 28, g__Granulicatella
+2025-01-31 13:38:03.340957 INFO::Fitting model to feature number 29, g__Lacticaseibacillus
+2025-01-31 13:38:03.343661 INFO::Fitting model to feature number 30, g__Fretibacterium
+2025-01-31 13:38:03.345589 INFO::Fitting model to feature number 31, g__Peptidiphaga
+2025-01-31 13:38:03.347293 INFO::Fitting model to feature number 32, g__Actinomyces
+2025-01-31 13:38:03.349023 INFO::Fitting model to feature number 33, g__Aggregatibacter
+2025-01-31 13:38:03.350771 INFO::Fitting model to feature number 34, g__Catonella
+2025-01-31 13:38:03.352932 INFO::Fitting model to feature number 35, g__Oribacterium
+2025-01-31 13:38:03.355063 INFO::Fitting model to feature number 36, g__Ruminococcaceae_.G.1.
+2025-01-31 13:38:03.356833 INFO::Fitting model to feature number 37, g__Rothia
+2025-01-31 13:38:03.35877 INFO::Fitting model to feature number 38, g__Lancefieldella
+2025-01-31 13:38:03.360994 INFO::Fitting model to feature number 39, g__Bacteroidetes_.G.5.
+2025-01-31 13:38:03.362649 INFO::Fitting model to feature number 40, g__Kingella
+2025-01-31 13:38:03.364262 INFO::Fitting model to feature number 41, g__Olsenella
+2025-01-31 13:38:03.366955 INFO::Fitting model to feature number 42, g__Riemerella
+2025-01-31 13:38:03.369308 INFO::Fitting model to feature number 43, g__Megasphaera
+2025-01-31 13:38:03.371276 INFO::Fitting model to feature number 44, g__Lachnoanaerobaculum
+2025-01-31 13:38:03.373448 INFO::Fitting model to feature number 45, g__Pseudoleptotrichia
+2025-01-31 13:38:03.376329 INFO::Fitting model to feature number 46, g__Corynebacterium
+2025-01-31 13:38:03.378417 INFO::Fitting model to feature number 47, g__Mycoplasma
+2025-01-31 13:38:03.380427 INFO::Fitting model to feature number 48, g__Saccharibacteria_.TM7._.G.3.
+2025-01-31 13:38:03.383284 INFO::Fitting model to feature number 49, g__Stomatobaculum
+2025-01-31 13:38:03.385869 INFO::Fitting model to feature number 50, g__Peptococcus
+2025-01-31 13:38:03.389113 INFO::Fitting model to feature number 51, g__Bacteroidetes_.G.3.
+2025-01-31 13:38:03.391868 INFO::Fitting model to feature number 52, g__Bifidobacterium
+2025-01-31 13:38:03.396128 INFO::Fitting model to feature number 53, g__Peptostreptococcaceae_.G.7.
+2025-01-31 13:38:03.398807 INFO::Fitting model to feature number 54, g__Saccharibacteria_.TM7._.G.6.
+2025-01-31 13:38:03.400937 INFO::Fitting model to feature number 55, g__Limosilactobacillus
+2025-01-31 13:38:03.403234 INFO::Fitting model to feature number 56, g__Cryptobacterium
+2025-01-31 13:38:03.406104 INFO::Fitting model to feature number 57, g__Arachnia
+2025-01-31 13:38:03.410398 INFO::Fitting model to feature number 58, g__Peptostreptococcaceae_.G.1.
+2025-01-31 13:38:03.413147 INFO::Fitting model to feature number 59, g__Veillonellaceae_.G.1.
+2025-01-31 13:38:03.41674 INFO::Fitting model to feature number 60, g__Gracilibacteria_.GN02._.G.1.
+2025-01-31 13:38:03.419576 INFO::Fitting model to feature number 61, g__Schaalia
+2025-01-31 13:38:03.42153 INFO::Fitting model to feature number 62, g__Eikenella
+2025-01-31 13:38:03.424373 INFO::Fitting model to feature number 63, g__Afipia
+2025-01-31 13:38:03.427349 INFO::Fitting model to feature number 64, g__Scardovia
+2025-01-31 13:38:03.429296 INFO::Fitting model to feature number 65, g__Lachnospiraceae_.G.3.
+2025-01-31 13:38:03.431554 INFO::Fitting model to feature number 66, g__Johnsonella
+2025-01-31 13:38:03.434569 INFO::Fitting model to feature number 67, g__Peptostreptococcaceae_.G.9.
+2025-01-31 13:38:03.436674 INFO::Fitting model to feature number 68, g__Absconditabacteria_.SR1._.G.1.
+2025-01-31 13:38:03.438445 INFO::Fitting model to feature number 69, g__Acidipropionibacterium
+2025-01-31 13:38:03.440176 INFO::Fitting model to feature number 70, g__Weeksellaceae_.G.1.
+2025-01-31 13:38:03.441898 INFO::Fitting model to feature number 71, g__Peptostreptococcaceae_.G.4.
+2025-01-31 13:38:03.444348 INFO::Fitting model to feature number 72, g__Mogibacterium
+2025-01-31 13:38:03.44667 INFO::Fitting model to feature number 73, g__Slackia
+2025-01-31 13:38:03.449255 INFO::Fitting model to feature number 74, g__Lachnospiraceae_.G.2.
+2025-01-31 13:38:03.4555 INFO::Counting total values for each feature
+2025-01-31 13:38:03.457548 INFO::Writing filtered data to file 2025-01-31maaslin2_output/features/filtered_data.tsv
+2025-01-31 13:38:03.461091 INFO::Writing filtered, normalized data to file 2025-01-31maaslin2_output/features/filtered_data_norm.tsv
+2025-01-31 13:38:03.469819 INFO::Writing filtered, normalized, transformed data to file 2025-01-31maaslin2_output/features/filtered_data_norm_transformed.tsv
+2025-01-31 13:38:03.473312 WARNING::Deleting existing residuals file: 2025-01-31maaslin2_output/fits/residuals.rds
+2025-01-31 13:38:03.474173 INFO::Writing residuals to file 2025-01-31maaslin2_output/fits/residuals.rds
+2025-01-31 13:38:03.475435 WARNING::Deleting existing fitted file: 2025-01-31maaslin2_output/fits/fitted.rds
+2025-01-31 13:38:03.476197 INFO::Writing fitted values to file 2025-01-31maaslin2_output/fits/fitted.rds
+2025-01-31 13:38:03.521667 INFO::Writing all results to file (ordered by increasing q-values): 2025-01-31maaslin2_output/all_results.tsv
+2025-01-31 13:38:03.548984 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): 2025-01-31maaslin2_output/significant_results.tsv

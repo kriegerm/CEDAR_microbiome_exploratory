@@ -1,0 +1,252 @@
+2025-04-11 12:36:26.470765 INFO::Writing function arguments to log file
+2025-04-11 12:36:26.474915 DEBUG::Function arguments
+2025-04-11 12:36:26.478269 DEBUG::Output folder: 2025-04-11maaslin2_output
+2025-04-11 12:36:26.478589 DEBUG::Min Abundance: 0.000000
+2025-04-11 12:36:26.478874 DEBUG::Min Prevalence: 0.100000
+2025-04-11 12:36:26.479136 DEBUG::Normalization: CSS
+2025-04-11 12:36:26.47947 DEBUG::Transform: LOG
+2025-04-11 12:36:26.479713 DEBUG::Analysis method: LM
+2025-04-11 12:36:26.48003 DEBUG::Max significance: 0.250000
+2025-04-11 12:36:26.480307 DEBUG::Random effects:
+2025-04-11 12:36:26.480547 DEBUG::Fixed effects: condition
+2025-04-11 12:36:26.480784 DEBUG::Correction method: BH
+2025-04-11 12:36:26.481126 DEBUG::Standardize: TRUE
+2025-04-11 12:36:26.481375 DEBUG::Cores: 1
+2025-04-11 12:36:26.481609 INFO::Verifying options selected are valid
+2025-04-11 12:36:26.501824 INFO::Determining format of input files
+2025-04-11 12:36:26.502762 INFO::Input format is data samples as rows and metadata samples as rows
+2025-04-11 12:36:26.505891 DEBUG::A total of 50 samples were found in both the data and metadata
+2025-04-11 12:36:26.506209 DEBUG::Reordering data/metadata to use same sample ordering
+2025-04-11 12:36:26.508389 INFO::Formula for fixed effects: expr ~  condition
+2025-04-11 12:36:26.509165 INFO::Filter data based on min abundance and min prevalence
+2025-04-11 12:36:26.509729 INFO::Total samples in data: 50
+2025-04-11 12:36:26.510253 INFO::Min samples required with min abundance for a feature not to be filtered: 5.000000
+2025-04-11 12:36:26.51354 INFO::Total filtered features: 384
+2025-04-11 12:36:26.514428 INFO::Filtered feature names from abundance and prevalence filtering: g__Parascardovia_s__denticolens, g__Prevotella_s__intermedia, g__Fannyhessea_s__sp._HMT_416, g__Streptococcus_s__parasanguinis_clade_721, g__Butyrivibrio_s__sp._HMT_080, g__Porphyromonas_s__uenonis, g__Filifactor_s__alocis, g__Porphyromonas_s__gingivalis, g__Olsenella_s__profusa, g__Klebsiella_s__pneumoniae, g__Prevotella_s__koreensis, g__Prevotella_s__baroniae, g__Saccharibacteria_.TM7._.G.1._s__bacterium_HMT_349, g__Saccharibacteria_.TM7._.G.1._s__bacterium_HMT_347, g__Alloiococcus_s__otitis, g__Limosilactobacillus_s__reuteri_clade_938, g__Prevotella_s__sp._HMT_942, g__Prevotella_s__sp._HMT_306, g__Porphyromonas_s__sp._HMT_277, g__Oribacterium_s__asaccharolyticum, g__Prevotella_s__multiformis, g__Treponema_s__sp._HMT_253, g__Gracilibacteria_.GN02._.G.1._s__bacterium_HMT_871, g__Fretibacterium_s__sp._HMT_360, g__Prevotella_s__jejuni, g__Streptococcus_s__sp._HMT_074, g__Actinomyces_s__graevenitzii, g__Treponema_s__sp._HMT_234, g__Lactobacillus_s__ultunensis, g__Neisseria_s__sp._HMT_499, g__Bacteroidetes_.G.3._s__bacterium_HMT_365, g__Pseudoramibacter_s__alactolyticus, g__Prevotella_s__fusca, g__Treponema_s__sp._HMT_268, g__Lancefieldella_s__sp._HMT_199, g__Desulfobulbus_s__sp._HMT_041, g__Bacteroidetes_.G.3._s__bacterium_HMT_503, g__Veillonellaceae_.G.1._s__bacterium_HMT_145, g__Scardovia_s__inopinata, g__Olsenella_s__uli, g__Capnocytophaga_s__haemolytica, g__Prevotella_s__sp._HMT_443, g__Veillonellaceae_.G.1._s__bacterium_HMT_129, g__Bacteroidetes_.G.3._s__bacterium_HMT_899, g__Cloacibacterium_s__sp._HMT_206, g__Lachnospiraceae_.G.8._s__bacterium_HMT_500, g__Bifidobacterium_s__breve, g__Colibacter_s__massiliensis, g__Shuttleworthia_s__satelles, g__Prevotella_s__sp._HMT_475, g__Neisseria_s__sp._HMT_523, g__Microbacterium_s__flavescens, g__Bulleidia_s__extructa, g__Kingella_s__sp._HMT_012, g__Actinomyces_s__sp._HMT_175, g__Saccharibacteria_.TM7._.G.1._s__bacterium_HMT_869, g__Streptococcus_s__sp._HMT_056, g__Porphyromonas_s__asaccharolytica, g__Treponema_s__sp._HMT_247, g__Prevotella_s__shahii, g__Prevotella_s__buccae, g__Selenomonas_s__sp._HMT_133, g__Lactobacillus_s__acidophilus, g__Limosilactobacillus_s__vaginalis, g__Brucella_s__anthropi, g__Fretibacterium_s__sp._HMT_358, g__Capnocytophaga_s__sp._HMT_332, g__Treponema_s__sp._HMT_228, g__Treponema_s__sp._HMT_951, g__Roseomonas_s__mucosa, g__Peptostreptococcaceae_.G.5._s__bacterium_HMT_493, g__Lentilactobacillus_s__buchneri, g__Peptostreptococcaceae_.G.7._s__bacterium_HMT_081, g__Stomatobaculum_s__sp._HMT_373, g__Capnocytophaga_s__sp._HMT_902, g__Aggregatibacter_s__sp._HMT_898, g__Anaeroglobus_s__geminatus, g__Bosea_s__vestrisii, g__Bacteroidetes_.G.3._s__bacterium_HMT_281, g__Lachnoanaerobaculum_s__sp._HMT_089, g__Lawsonella_s__clevelandensis, g__Neisseria_s__sp._HMT_018, g__Schaalia_s__lingnae, g__Prevotella_s__dentalis, g__Peptostreptococcaceae_.G.6._s__.Eubacterium._nodatum, g__Campylobacter_s__curvus, g__Prevotella_s__loescheii, g__Centipeda_s__periodontii, g__Aggregatibacter_s__actinomycetemcomitans, g__Capnocytophaga_s__sp._HMT_901, g__Limosilactobacillus_s__oris, g__Leptotrichia_s__sp._HMT_223, g__Weeksellaceae_.G.1._s__sp._HMT_931, g__Schaalia_s__sp._HMT_172, g__Capnocytophaga_s__sp._HMT_878, g__Selenomonas_s__dianae, g__Treponema_s__vincentii, g__Treponema_s__sp._HMT_252, g__Eggerthia_s__catenaformis, g__Prevotella_s__sp._HMT_304, g__Saccharibacteria_.TM7._.G.1._s__bacterium_HMT_352, g__Lachnospiraceae_.G.7._s__bacterium_HMT_163, g__Saccharibacteria_.TM7._.G.4._s__bacterium_HMT_355, g__Treponema_s__sp._HMT_262, g__Treponema_s__sp._HMT_226, g__Fusobacterium_s__sp._HMT_204, g__Mogibacterium_s__timidum, g__Bacteroides_s__zoogleoformans, g__Dietzia_s__cinnamea, g__Treponema_s__parvum, g__Dialister_s__sp._HMT_119, g__Haemophilus_s__pittmaniae, g__Treponema_s__sp._HMT_236, g__Peptoniphilus_s__lacrimalis, g__Corynebacterium_s__coyleae, g__Streptococcus_s__pneumoniae, g__Capnocytophaga_s__sp._HMT_335, g__Prevotella_s__buccalis, g__Treponema_s__sp._HMT_230, g__Prevotella_s__sp._HMT_301, g__Treponema_s__sp._HMT_257, g__Leptotrichia_s__sp._HMT_879, g__Actinomyces_s__johnsonii, g__Haemophilus_s__sputorum, g__Corynebacterium_s__tuberculostearicum, g__Simonsiella_s__muelleri, g__Mycoplasma_s__faucium, g__Anaerococcus_s__prevotii, g__Mycolicibacterium_s__neoaurum, g__Haemophilus_s__influenzae, g__Stomatobaculum_s__sp._HMT_910, g__Cloacibacterium_s__normanense, g__Catonella_s__sp._HMT_451, g__Peptoniphilus_s__sp._HMT_187, g__Prevotella_s__sp._HMT_376, g__Schaalia_s__georgiae, g__Ligilactobacillus_s__salivarius, g__Actinomyces_s__sp._HMT_525, g__Mitsuokella_s__sp._HMT_131, g__Leptotrichia_s__sp._HMT_463, g__Bacteroidetes_.G.3._s__bacterium_HMT_280, g__Schaalia_s__sp._HMT_877, g__Lachnospiraceae_.G.2._s__bacterium_HMT_096, g__Leptotrichia_s__sp._HMT_218, g__Actinomyces_s__sp._HMT_897, g__Erysipelotrichaceae_.G.1._s__bacterium_HMT_905, g__Mitsuokella_s__sp._HMT_521, g__Peptoniphilus_s__sp._HMT_386, g__Veillonellaceae_.G.1._s__bacterium_HMT_135, g__Anaerolineae_.G.1._s__bacterium_HMT_439, g__Prevotella_s__bivia, g__Ruminococcaceae_.G.2._s__bacterium_HMT_085, g__Lactobacillus_s__crispatus, g__Treponema_s__medium, g__Ralstonia_s__pickettii, g__Oribacterium_s__parvum, g__Aeriscardovia_s__bacterium_HMT_407, g__Kocuria_s__rhizophila, g__Leptotrichia_s__sp._HMT_217, g__Arachnia_s__rubra, g__Actinomyces_s__sp._HMT_448, g__Dialister_s__micraerophilus, g__Clostridiales_.F.1..G.1._s__bacterium_HMT_093, g__Corynebacterium_s__simulans, g__Aggregatibacter_s__sp._HMT_949, g__Paenibacillus_s__glucanolyticus, g__Paracoccus_s__yeei, g__Treponema_s__sp._HMT_235, g__Lacticaseibacillus_s__paracasei, g__Desulfovibrio_s__fairfieldensis, g__Saccharibacteria_.TM7._.G.5._s__bacterium_HMT_356, g__Peptostreptococcaceae_.G.2._s__bacterium_HMT_091, g__Treponema_s__amylovorum, g__Prevotella_s__enoeca, g__Janibacter_s__indicus, g__Propionibacteriaceae_.G.2._s__bacterium_HMT_192, g__Fastidiosipila_s__sanguinis, g__Treponema_s__sp._HMT_517, g__Peptoniphilus_s__sp._HMT_375, g__Veillonella_s__rogosae, g__Clostridiales_.F.1..G.2._s__bacterium_HMT_402, g__Actinomyces_s__israelii, g__Listeria_s__monocytogenes, g__Selenomonas_s__sp._HMT_442, g__Desulfovibrio_s__sp._HMT_040, g__Treponema_s__pectinovorum, g__Actinomyces_s__sp._HMT_896, g__Pedobacter_s__sp._HMT_318, g__Streptococcus_s__downei, g__Prevotella_s__aurantiaca, g__Treponema_s__sp._HMT_238, g__Capnocytophaga_s__sp._HMT_903, g__Mesorhizobium_s__japonicum, g__Treponema_s__sp._HMT_270, g__Cutibacterium_s__avidum, g__Cutibacterium_s__sp._HMT_193, g__Fretibacterium_s__sp._HMT_362, g__Corynebacterium_s__striatum, g__Peptostreptococcaceae_.G.5._s__.Eubacterium._saphenum, g__Gracilibacteria_.GN02._.G.2._s__bacterium_HMT_873, g__Propionibacteriaceae_.G.1._s__bacterium_HMT_915, g__Eikenella_s__sp._HMT_011, g__Actinomyces_s__sp._HMT_170, g__Capnocytophaga_s__sp._HMT_863, g__Erysipelothrix_s__tonsillarum, g__Prevotella_s__sp._HMT_396, g__Enterobacter_s__cancerogenus, g__Streptococcus_s__peroris, g__Veillonella_s__denticariosi, g__Corynebacterium_s__aurimucosum, g__Prevotella_s__sp._HMT_293, g__Neisseria_s__weaveri, g__Saccharibacteria_.TM7._.G.2._s__bacterium_HMT_350, g__Selenomonas_s__sp._HMT_937, g__Enterococcus_s__casseliflavus, g__Selenomonas_s__sp._HMT_478, g__Haemophilus_s__aegyptius, g__Peptoniphilaceae_.G.3._s__bacterium_HMT_929, g__Butyrivibrio_s__sp._HMT_455, g__Treponema_s__sp._HMT_251, g__Fusobacterium_s__sp._HMT_370, g__Selenomonas_s__sp._HMT_920, g__Serratia_s__marcescens, g__Kingella_s__sp._HMT_932, g__Prevotella_s__sp._HMT_309, g__Fretibacterium_s__sp._HMT_361, g__Bacteroidetes_.G.5._s__bacterium_HMT_505, g__Prevotella_s__scopos, g__Treponema_s__sp._HMT_271, g__Sneathia_s__sanguinegens, g__Bacteroides_s__heparinolyticus, g__Sneathia_s__vaginalis, g__Treponema_s__sp._HMT_927, g__Pyramidobacter_s__piscolens, g__Bacteroides_s__pyogenes, g__Peptoniphilaceae_.G.1._s__bacterium_HMT_113, g__Treponema_s__sp._HMT_258, g__Treponema_s__sp._HMT_246, g__Syntrophomonadaceae_.VIII..G.1._s__bacterium_HMT_435, g__Streptococcus_s__sinensis, g__Peptostreptococcaceae_.G.8._s__bacterium_HMT_382, g__Brevundimonas_s__diminuta, g__Butyrivibrio_s__sp._HMT_090, g__Treponema_s__sp._HMT_263, g__Phocaeicola_s__abscessus, g__Erysipelotrichaceae_.G.1._s__bacterium_HMT_904, g__Johnsonella_s__sp._HMT_166, g__Treponema_s__sp._HMT_254, g__Treponema_s__sp._HMT_242, g__Erythrobacter_s__tepidarius, g__Jonquetella_s__anthropi, g__Mollicutes_.G.2._s__bacterium_HMT_906, g__Yersinia_s__pestis, g__Capnocytophaga_s__ochracea, g__Treponema_s__sp._HMT_490, g__Peptoniphilaceae_.G.2._s__bacterium_HMT_790, g__Treponema_s__sp._HMT_508, g__Peptostreptococcaceae_.G.1._s__bacterium_HMT_383, g__Enterococcus_s__durans, g__Treponema_s__sp._HMT_239, g__Mycoplasmopsis_s__lipophila, g__Neisseria_s__sp._HMT_020, g__Peptostreptococcaceae_.G.7._s__.Eubacterium._yurii_subsp._schtitka, g__Oryzomicrobium_s__terrae, g__Treponema_s__putidum, g__Schaalia_s__cardiffensis, g__Pedobacter_s__sp._HMT_933, g__Mollicutes_.G.1._s__bacterium_HMT_504, g__Treponema_s__sp._HMT_227, g__Pedobacter_s__sp._HMT_321, g__Streptococcus_s__cristatus_clade_886, g__Olegusella_s__massiliensis, g__Bacteroidetes_.G.3._s__bacterium_HMT_436, g__Lachnospiraceae_.G.10._s__bacterium_HMT_094, g__Olsenella_s__sp._HMT_939, g__Neisseria_s__bacilliformis, g__Corynebacterium_s__pseudodiphtheriticum, g__Stomatobaculum_s__sp._HMT_097, g__Mogibacterium_s__diversum, g__Desulfomicrobium_s__orale, g__Megasphaera_s__sp._HMT_841, g__Lachnoanaerobaculum_s__sp._HMT_496, g__Oribacterium_s__sp._HMT_102, g__Achromobacter_s__xylosoxidans, g__Prevotella_s__multisaccharivorax, g__Peptostreptococcaceae_.G.6._s__.Eubacterium._minutum, g__Peptostreptococcaceae_.G.3._s__bacterium_HMT_950, g__Treponema_s__sp._HMT_256, g__Bdellovibrio_s__sp._HMT_039, g__Treponema_s__sp._HMT_249, g__Microbacterium_s__ginsengisoli, g__Peptostreptococcaceae_.G.3._s__bacterium_HMT_495, g__Schaalia_s__meyeri, g__Corynebacterium_s__accolens, g__Caldilinea_s__aerophila, g__Helicobacter_s__pylori, g__Segetibacter_s__aerophilus, g__Neisseriaceae_.G.1._s__bacterium_HMT_174, g__Treponema_s__sp._HMT_518, g__Bartonella_s__schoenbuchensis, g__Lactococcus_s__lactis, g__Ralstonia_s__sp._HMT_406, g__Haemophilus_s__parahaemolyticus, g__Campylobacter_s__sp._HMT_044, g__Chryseobacterium_s__sp._HMT_319, g__Prevotella_s__sp._HMT_820, g__Peptostreptococcus_s__anaerobius, g__Lachnoanaerobaculum_s__sp._HMT_083, g__Bacteroidetes_.G.5._s__bacterium_HMT_507, g__Streptococcus_s__agalactiae, g__Lachnospiraceae_.G.7._s__bacterium_HMT_086, g__Kingella_s__kingae, g__Proteus_s__mirabilis, g__Absconditabacteria_.SR1._.G.1._s__bacterium_HMT_875, g__Kingella_s__sp._HMT_459, g__Leptotrichia_s__sp._HMT_847, g__Campylobacter_s__ureolyticus, g__Mobiluncus_s__mulieris, g__Peptostreptococcaceae_.G.7._s__bacterium_HMT_922, g__Porphyromonas_s__sp._HMT_285, g__Mycoplasma_s__orale, g__Anaerococcus_s__sp._HMT_290, g__Odoribacter_s__bacterium_HMT_516, g__Bifidobacterium_s__longum, g__Leptotrichia_s__sp._HMT_909, g__Finegoldia_s__magna, g__Kluyvera_s__ascorbata, g__Corynebacterium_s__singulare, g__Tannerella_s__sp._HMT_916, g__Enterococcus_s__faecalis, g__Mycoplasmopsis_s__fermentans, g__Prevotella_s__sp._HMT_305, g__Gardnerella_s__vaginalis, g__Olsenella_s__sp._HMT_809, g__Streptococcus_s__australis, g__Aerococcus_s__viridans, g__Schaalia_s__odontolytica, g__Saccharibacteria_.TM7._.G.1._s__bacterium_HMT_488, g__Alloscardovia_s__omnicolens, g__Anaerococcus_s__sp._HMT_295, g__Dermabacter_s__hominis, g__Veillonellaceae_.G.1._s__bacterium_HMT_483, g__Veillonella_s__sp._HMT_917, g__Actinomyces_s__timonensis, g__Haematobacter_s__missouriensis, g__Fannyhessea_s__vaginae, g__Kocuria_s__atrinae, g__Klebsiella_s__aerogenes, g__Erythrobacter_s__ramosus, g__Anaerococcus_s__octavius, g__Peptoniphilus_s__harei, g__Enterococcus_s__saccharolyticus, g__Selenomonas_s__sp._HMT_388, g__Limosilactobacillus_s__panis, g__Paenibacillus_s__typhae, g__Sanguibacter_s__keddieii, g__Atopobium_s__minutum, g__Actinomyces_s__sp._HMT_414, g__Saccharibacteria_.TM7._.G.8._s__bacterium_HMT_955, g__Corynebacterium_s__mucifaciens, g__Mitsuokella_s__multacida, g__Capnocytophaga_s__sp._HMT_380, g__Lysinibacillus_s__fusiformis, g__Aquamicrobium_s__lusatiense, g__Methanobrevibacter_s__oralis, g__Brevibacterium_s__paucivorans, g__Eggerthella_s__lenta, g__Corynebacterium_s__kroppenstedtii, g__Candidatus_Saccharimonas_s__aalborgensis, g__Chlamydia_s__pneumoniae, g__Kocuria_s__palustris, g__Ruminococcaceae_.G.3._s__bacterium_HMT_366, g__Dolosigranulum_s__pigrum, g__Veillonellaceae_.G.1._s__bacterium_HMT_148, g__Corynebacterium_s__amycolatum, g__Treponema_s__sp._HMT_260, g__Prevotella_s__sp._HMT_515, g__Lentilactobacillus_s__kisonensis, g__Bacteroidetes_.G.7._s__bacterium_HMT_911, g__Saccharibacteria_.TM7._.G.7._s__bacterium_HMT_954, g__Mycoplasma_s__hominis, g__Corynebacterium_s__jeikeium, g__Treponema_s__sp._HMT_250, g__Enhydrobacter_s__aerosaccus
+2025-04-11 12:36:26.517123 INFO::Total filtered features with variance filtering: 0
+2025-04-11 12:36:26.51773 INFO::Filtered feature names from variance filtering:
+2025-04-11 12:36:26.518268 INFO::Running selected normalization method: CSS
+2025-04-11 12:36:26.565586 INFO::Applying z-score to standardize continuous metadata
+2025-04-11 12:36:26.567831 INFO::Running selected transform method: LOG
+2025-04-11 12:36:26.570115 INFO::Running selected analysis method: LM
+2025-04-11 12:36:26.575782 INFO::Fitting model to feature number 1, g__Lautropia_s__mirabilis
+2025-04-11 12:36:26.579316 INFO::Fitting model to feature number 2, g__Streptococcus_s__oralis_subsp._dentisani_clade_058
+2025-04-11 12:36:26.580785 INFO::Fitting model to feature number 3, g__Fusobacterium_s__nucleatum
+2025-04-11 12:36:26.582555 INFO::Fitting model to feature number 4, g__Neisseria_s__flava
+2025-04-11 12:36:26.583877 INFO::Fitting model to feature number 5, g__Streptococcus_s__anginosus
+2025-04-11 12:36:26.585183 INFO::Fitting model to feature number 6, g__Leptotrichia_s__shahii
+2025-04-11 12:36:26.586804 INFO::Fitting model to feature number 7, g__Streptococcus_s__sanguinis
+2025-04-11 12:36:26.588119 INFO::Fitting model to feature number 8, g__Prevotella_s__oralis
+2025-04-11 12:36:26.589877 INFO::Fitting model to feature number 9, g__Bacteroidales_.G.2._s__bacterium_HMT_274
+2025-04-11 12:36:26.593336 INFO::Fitting model to feature number 10, g__Capnocytophaga_s__sputigena
+2025-04-11 12:36:26.595344 INFO::Fitting model to feature number 11, g__Haemophilus_s__parainfluenzae
+2025-04-11 12:36:26.597446 INFO::Fitting model to feature number 12, g__Abiotrophia_s__defectiva
+2025-04-11 12:36:26.599032 INFO::Fitting model to feature number 13, g__Parvimonas_s__sp._HMT_110
+2025-04-11 12:36:26.600358 INFO::Fitting model to feature number 14, g__Peptostreptococcus_s__stomatis
+2025-04-11 12:36:26.601622 INFO::Fitting model to feature number 15, g__Parvimonas_s__micra
+2025-04-11 12:36:26.60317 INFO::Fitting model to feature number 16, g__Veillonella_s__parvula
+2025-04-11 12:36:26.604479 INFO::Fitting model to feature number 17, g__Leptotrichia_s__hongkongensis
+2025-04-11 12:36:26.605817 INFO::Fitting model to feature number 18, g__Lactobacillus_s__gasseri
+2025-04-11 12:36:26.607375 INFO::Fitting model to feature number 19, g__Veillonella_s__dispar
+2025-04-11 12:36:26.608623 INFO::Fitting model to feature number 20, g__Gemella_s__haemolysans
+2025-04-11 12:36:26.609871 INFO::Fitting model to feature number 21, g__Prevotella_s__sp._HMT_300
+2025-04-11 12:36:26.611409 INFO::Fitting model to feature number 22, g__Prevotella_s__nigrescens
+2025-04-11 12:36:26.612648 INFO::Fitting model to feature number 23, g__Prevotella_s__sp._HMT_472
+2025-04-11 12:36:26.6139 INFO::Fitting model to feature number 24, g__Treponema_s__lecithinolyticum
+2025-04-11 12:36:26.615504 INFO::Fitting model to feature number 25, g__Leptotrichia_s__sp._HMT_417
+2025-04-11 12:36:26.616761 INFO::Fitting model to feature number 26, g__Streptococcus_s__intermedius
+2025-04-11 12:36:26.618001 INFO::Fitting model to feature number 27, g__Prevotella_s__denticola
+2025-04-11 12:36:26.619557 INFO::Fitting model to feature number 28, g__Campylobacter_s__rectus
+2025-04-11 12:36:26.620799 INFO::Fitting model to feature number 29, g__Tannerella_s__forsythia
+2025-04-11 12:36:26.622047 INFO::Fitting model to feature number 30, g__Dialister_s__invisus
+2025-04-11 12:36:26.623571 INFO::Fitting model to feature number 31, g__Flavitalea_s__sp._HMT_320
+2025-04-11 12:36:26.624856 INFO::Fitting model to feature number 32, g__Prevotella_s__saccharolytica
+2025-04-11 12:36:26.626129 INFO::Fitting model to feature number 33, g__Clostridiales_.F.3..G.1._s__bacterium_HMT_876
+2025-04-11 12:36:26.627773 INFO::Fitting model to feature number 34, g__Porphyromonas_s__pasteri
+2025-04-11 12:36:26.629035 INFO::Fitting model to feature number 35, g__Solobacterium_s__moorei
+2025-04-11 12:36:26.630323 INFO::Fitting model to feature number 36, g__Campylobacter_s__gracilis
+2025-04-11 12:36:26.63189 INFO::Fitting model to feature number 37, g__Neisseria_s__flavescens
+2025-04-11 12:36:26.633169 INFO::Fitting model to feature number 38, g__Streptococcus_s__mutans
+2025-04-11 12:36:26.634783 INFO::Fitting model to feature number 39, g__Porphyromonas_s__endodontalis
+2025-04-11 12:36:26.636367 INFO::Fitting model to feature number 40, g__Prevotella_s__salivae
+2025-04-11 12:36:26.637655 INFO::Fitting model to feature number 41, g__Prevotella_s__oris
+2025-04-11 12:36:26.639298 INFO::Fitting model to feature number 42, g__Neisseria_s__perflava
+2025-04-11 12:36:26.641229 INFO::Fitting model to feature number 43, g__Neisseria_s__elongata
+2025-04-11 12:36:26.645379 INFO::Fitting model to feature number 44, g__Granulicatella_s__adiacens
+2025-04-11 12:36:26.646638 INFO::Fitting model to feature number 45, g__Lacticaseibacillus_s__casei
+2025-04-11 12:36:26.648407 INFO::Fitting model to feature number 46, g__Haemophilus_s__sp._HMT_036
+2025-04-11 12:36:26.65026 INFO::Fitting model to feature number 47, g__Streptococcus_s__sobrinus
+2025-04-11 12:36:26.65159 INFO::Fitting model to feature number 48, g__Veillonella_s__sp._HMT_780
+2025-04-11 12:36:26.653164 INFO::Fitting model to feature number 49, g__Capnocytophaga_s__endodontalis
+2025-04-11 12:36:26.654473 INFO::Fitting model to feature number 50, g__Treponema_s__socranskii
+2025-04-11 12:36:26.655844 INFO::Fitting model to feature number 51, g__Leptotrichia_s__wadei
+2025-04-11 12:36:26.657524 INFO::Fitting model to feature number 52, g__Neisseria_s__cinerea
+2025-04-11 12:36:26.661516 INFO::Fitting model to feature number 53, g__Cardiobacterium_s__hominis
+2025-04-11 12:36:26.66292 INFO::Fitting model to feature number 54, g__Peptidiphaga_s__sp._HMT_183
+2025-04-11 12:36:26.664595 INFO::Fitting model to feature number 55, g__Streptococcus_s__gordonii
+2025-04-11 12:36:26.666016 INFO::Fitting model to feature number 56, g__Prevotella_s__veroralis
+2025-04-11 12:36:26.667888 INFO::Fitting model to feature number 57, g__Actinomyces_s__gerencseriae
+2025-04-11 12:36:26.67016 INFO::Fitting model to feature number 58, g__Prevotella_s__histicola
+2025-04-11 12:36:26.671493 INFO::Fitting model to feature number 59, g__Catonella_s__morbi
+2025-04-11 12:36:26.672955 INFO::Fitting model to feature number 60, g__Alloprevotella_s__tannerae
+2025-04-11 12:36:26.674553 INFO::Fitting model to feature number 61, g__Oribacterium_s__sp._HMT_078
+2025-04-11 12:36:26.675868 INFO::Fitting model to feature number 62, g__Capnocytophaga_s__sp._HMT_864
+2025-04-11 12:36:26.679636 INFO::Fitting model to feature number 63, g__Saccharibacteria_.TM7._.G.1._s__bacterium_HMT_346
+2025-04-11 12:36:26.681236 INFO::Fitting model to feature number 64, g__Prevotella_s__melaninogenica
+2025-04-11 12:36:26.682481 INFO::Fitting model to feature number 65, g__Granulicatella_s__elegans
+2025-04-11 12:36:26.683864 INFO::Fitting model to feature number 66, g__Tannerella_s__sp._HMT_286
+2025-04-11 12:36:26.685426 INFO::Fitting model to feature number 67, g__Ruminococcaceae_.G.1._s__bacterium_HMT_075
+2025-04-11 12:36:26.686692 INFO::Fitting model to feature number 68, g__Porphyromonas_s__sp._HMT_930
+2025-04-11 12:36:26.687936 INFO::Fitting model to feature number 69, g__Lancefieldella_s__rimae
+2025-04-11 12:36:26.689551 INFO::Fitting model to feature number 70, g__Bacteroidetes_.G.5._s__bacterium_HMT_511
+2025-04-11 12:36:26.690817 INFO::Fitting model to feature number 71, g__Veillonella_s__atypica
+2025-04-11 12:36:26.692094 INFO::Fitting model to feature number 72, g__Fretibacterium_s__sp._HMT_359
+2025-04-11 12:36:26.696202 INFO::Fitting model to feature number 73, g__Haemophilus_s__haemolyticus
+2025-04-11 12:36:26.697464 INFO::Fitting model to feature number 74, g__Dialister_s__pneumosintes
+2025-04-11 12:36:26.698725 INFO::Fitting model to feature number 75, g__Rothia_s__dentocariosa
+2025-04-11 12:36:26.700286 INFO::Fitting model to feature number 76, g__Prevotella_s__sp._HMT_317
+2025-04-11 12:36:26.701623 INFO::Fitting model to feature number 77, g__Saccharibacteria_.TM7._.G.1._s__bacterium_HMT_348
+2025-04-11 12:36:26.702904 INFO::Fitting model to feature number 78, g__Capnocytophaga_s__sp._HMT_336
+2025-04-11 12:36:26.704476 INFO::Fitting model to feature number 79, g__Treponema_s__denticola
+2025-04-11 12:36:26.705744 INFO::Fitting model to feature number 80, g__Riemerella_s__sp._HMT_322
+2025-04-11 12:36:26.70704 INFO::Fitting model to feature number 81, g__Alloprevotella_s__sp._HMT_473
+2025-04-11 12:36:26.708622 INFO::Fitting model to feature number 82, g__Megasphaera_s__micronuciformis
+2025-04-11 12:36:26.712129 INFO::Fitting model to feature number 83, g__Selenomonas_s__noxia
+2025-04-11 12:36:26.713418 INFO::Fitting model to feature number 84, g__Kingella_s__oralis
+2025-04-11 12:36:26.714953 INFO::Fitting model to feature number 85, g__Prevotella_s__sp._HMT_292
+2025-04-11 12:36:26.716235 INFO::Fitting model to feature number 86, g__Prevotella_s__oulorum
+2025-04-11 12:36:26.717482 INFO::Fitting model to feature number 87, g__Prevotella_s__nanceiensis
+2025-04-11 12:36:26.719089 INFO::Fitting model to feature number 88, g__Capnocytophaga_s__leadbetteri
+2025-04-11 12:36:26.720327 INFO::Fitting model to feature number 89, g__Mycoplasma_s__salivarium
+2025-04-11 12:36:26.72159 INFO::Fitting model to feature number 90, g__Corynebacterium_s__matruchotii
+2025-04-11 12:36:26.723125 INFO::Fitting model to feature number 91, g__Saccharibacteria_.TM7._.G.3._s__bacterium_HMT_351
+2025-04-11 12:36:26.724363 INFO::Fitting model to feature number 92, g__Treponema_s__sp._HMT_231
+2025-04-11 12:36:26.727768 INFO::Fitting model to feature number 93, g__Fusobacterium_s__periodonticum
+2025-04-11 12:36:26.729326 INFO::Fitting model to feature number 94, g__Stomatobaculum_s__longum
+2025-04-11 12:36:26.73059 INFO::Fitting model to feature number 95, g__Streptococcus_s__salivarius
+2025-04-11 12:36:26.731848 INFO::Fitting model to feature number 96, g__Neisseria_s__subflava
+2025-04-11 12:36:26.733434 INFO::Fitting model to feature number 97, g__Rothia_s__aeria
+2025-04-11 12:36:26.734691 INFO::Fitting model to feature number 98, g__Lachnoanaerobaculum_s__saburreum
+2025-04-11 12:36:26.73596 INFO::Fitting model to feature number 99, g__Capnocytophaga_s__gingivalis
+2025-04-11 12:36:26.737494 INFO::Fitting model to feature number 100, g__Actinomyces_s__sp._HMT_169
+2025-04-11 12:36:26.738737 INFO::Fitting model to feature number 101, g__Pseudoleptotrichia_s__goodfellowii
+2025-04-11 12:36:26.739995 INFO::Fitting model to feature number 102, g__Gemella_s__morbillorum
+2025-04-11 12:36:26.74154 INFO::Fitting model to feature number 103, g__Capnocytophaga_s__sp._HMT_338
+2025-04-11 12:36:26.744198 INFO::Fitting model to feature number 104, g__Cardiobacterium_s__valvarum
+2025-04-11 12:36:26.745493 INFO::Fitting model to feature number 105, g__Neisseria_s__oralis
+2025-04-11 12:36:26.747023 INFO::Fitting model to feature number 106, g__Leptotrichia_s__sp._HMT_225
+2025-04-11 12:36:26.748278 INFO::Fitting model to feature number 107, g__Leptotrichia_s__buccalis
+2025-04-11 12:36:26.749533 INFO::Fitting model to feature number 108, g__Streptococcus_s__constellatus
+2025-04-11 12:36:26.751069 INFO::Fitting model to feature number 109, g__Peptococcus_s__sp._HMT_167
+2025-04-11 12:36:26.752308 INFO::Fitting model to feature number 110, g__Selenomonas_s__sp._HMT_136
+2025-04-11 12:36:26.753577 INFO::Fitting model to feature number 111, g__Streptococcus_s__cristatus_clade_578
+2025-04-11 12:36:26.755146 INFO::Fitting model to feature number 112, g__Aggregatibacter_s__paraphrophilus
+2025-04-11 12:36:26.756406 INFO::Fitting model to feature number 113, g__Fusobacterium_s__hwasookii
+2025-04-11 12:36:26.757671 INFO::Fitting model to feature number 114, g__Aggregatibacter_s__aphrophilus
+2025-04-11 12:36:26.759226 INFO::Fitting model to feature number 115, g__Corynebacterium_s__durum
+2025-04-11 12:36:26.760851 INFO::Fitting model to feature number 116, g__Fusobacterium_s__naviforme
+2025-04-11 12:36:26.76209 INFO::Fitting model to feature number 117, g__Lachnoanaerobaculum_s__umeaense
+2025-04-11 12:36:26.76364 INFO::Fitting model to feature number 118, g__Leptotrichia_s__sp._HMT_392
+2025-04-11 12:36:26.764888 INFO::Fitting model to feature number 119, g__Capnocytophaga_s__granulosa
+2025-04-11 12:36:26.766128 INFO::Fitting model to feature number 120, g__Leptotrichia_s__hofstadii
+2025-04-11 12:36:26.767701 INFO::Fitting model to feature number 121, g__Prevotella_s__pleuritidis
+2025-04-11 12:36:26.76905 INFO::Fitting model to feature number 122, g__Treponema_s__maltophilum
+2025-04-11 12:36:26.770321 INFO::Fitting model to feature number 123, g__Actinomyces_s__oris
+2025-04-11 12:36:26.771936 INFO::Fitting model to feature number 124, g__Actinomyces_s__massiliensis
+2025-04-11 12:36:26.77319 INFO::Fitting model to feature number 125, g__Bifidobacterium_s__dentium
+2025-04-11 12:36:26.77445 INFO::Fitting model to feature number 126, g__Fusobacterium_s__sp._HMT_203
+2025-04-11 12:36:26.775995 INFO::Fitting model to feature number 127, g__Peptostreptococcaceae_.G.7._s__.Eubacterium._yurii_subsps._yurii_._margaretiae
+2025-04-11 12:36:26.778217 INFO::Fitting model to feature number 128, g__Saccharibacteria_.TM7._.G.6._s__bacterium_HMT_870
+2025-04-11 12:36:26.7795 INFO::Fitting model to feature number 129, g__Campylobacter_s__concisus
+2025-04-11 12:36:26.781075 INFO::Fitting model to feature number 130, g__Selenomonas_s__sputigena
+2025-04-11 12:36:26.782348 INFO::Fitting model to feature number 131, g__Porphyromonas_s__catoniae
+2025-04-11 12:36:26.783619 INFO::Fitting model to feature number 132, g__Cryptobacterium_s__curtum
+2025-04-11 12:36:26.789837 INFO::Fitting model to feature number 133, g__Streptococcus_s__lactarius
+2025-04-11 12:36:26.791227 INFO::Fitting model to feature number 134, g__Fretibacterium_s__fastidiosum
+2025-04-11 12:36:26.792695 INFO::Fitting model to feature number 135, g__Fusobacterium_s__sp._HMT_248
+2025-04-11 12:36:26.794902 INFO::Fitting model to feature number 136, g__Arachnia_s__propionica
+2025-04-11 12:36:26.796224 INFO::Fitting model to feature number 137, g__Peptostreptococcaceae_.G.1._s__.Eubacterium._sulci
+2025-04-11 12:36:26.797489 INFO::Fitting model to feature number 138, g__Aggregatibacter_s__sp._HMT_458
+2025-04-11 12:36:26.799019 INFO::Fitting model to feature number 139, g__Porphyromonas_s__sp._HMT_278
+2025-04-11 12:36:26.800265 INFO::Fitting model to feature number 140, g__Selenomonas_s__infelix
+2025-04-11 12:36:26.80163 INFO::Fitting model to feature number 141, g__Selenomonas_s__sp._HMT_936
+2025-04-11 12:36:26.8032 INFO::Fitting model to feature number 142, g__Pseudoleptotrichia_s__sp._HMT_221
+2025-04-11 12:36:26.804467 INFO::Fitting model to feature number 143, g__Aggregatibacter_s__sp._HMT_513
+2025-04-11 12:36:26.805724 INFO::Fitting model to feature number 144, g__Leptotrichia_s__sp._HMT_215
+2025-04-11 12:36:26.807274 INFO::Fitting model to feature number 145, g__Rothia_s__mucilaginosa
+2025-04-11 12:36:26.808511 INFO::Fitting model to feature number 146, g__Actinomyces_s__naeslundii
+2025-04-11 12:36:26.810995 INFO::Fitting model to feature number 147, g__Schaalia_s__sp._HMT_180
+2025-04-11 12:36:26.81257 INFO::Fitting model to feature number 148, g__Streptococcus_s__parasanguinis_clade_411
+2025-04-11 12:36:26.813827 INFO::Fitting model to feature number 149, g__Eikenella_s__corrodens
+2025-04-11 12:36:26.815118 INFO::Fitting model to feature number 150, g__Aggregatibacter_s__sp._HMT_512
+2025-04-11 12:36:26.816648 INFO::Fitting model to feature number 151, g__Afipia_s__broomeae
+2025-04-11 12:36:26.81805 INFO::Fitting model to feature number 152, g__Scardovia_s__wiggsiae
+2025-04-11 12:36:26.819531 INFO::Fitting model to feature number 153, g__Alloprevotella_s__sp._HMT_912
+2025-04-11 12:36:26.821085 INFO::Fitting model to feature number 154, g__Porphyromonas_s__sp._HMT_284
+2025-04-11 12:36:26.822344 INFO::Fitting model to feature number 155, g__Leptotrichia_s__sp._HMT_498
+2025-04-11 12:36:26.823592 INFO::Fitting model to feature number 156, g__Selenomonas_s__sp._HMT_146
+2025-04-11 12:36:26.825183 INFO::Fitting model to feature number 157, g__Kingella_s__denitrificans
+2025-04-11 12:36:26.827546 INFO::Fitting model to feature number 158, g__Capnocytophaga_s__sp._HMT_412
+2025-04-11 12:36:26.828805 INFO::Fitting model to feature number 159, g__Lachnospiraceae_.G.3._s__bacterium_HMT_100
+2025-04-11 12:36:26.830342 INFO::Fitting model to feature number 160, g__Saccharibacteria_.TM7._.G.1._s__bacterium_HMT_952
+2025-04-11 12:36:26.831606 INFO::Fitting model to feature number 161, g__Johnsonella_s__ignava
+2025-04-11 12:36:26.832885 INFO::Fitting model to feature number 162, g__Alloprevotella_s__sp._HMT_308
+2025-04-11 12:36:26.834454 INFO::Fitting model to feature number 163, g__Alloprevotella_s__sp._HMT_914
+2025-04-11 12:36:26.835752 INFO::Fitting model to feature number 164, g__Selenomonas_s__sp._HMT_134
+2025-04-11 12:36:26.837016 INFO::Fitting model to feature number 165, g__Leptotrichia_s__sp._HMT_212
+2025-04-11 12:36:26.83856 INFO::Fitting model to feature number 166, g__Peptostreptococcaceae_.G.1._s__.Eubacterium._infirmum
+2025-04-11 12:36:26.839788 INFO::Fitting model to feature number 167, g__Peptostreptococcaceae_.G.9._s__.Eubacterium._brachy
+2025-04-11 12:36:26.841041 INFO::Fitting model to feature number 168, g__Treponema_s__sp._HMT_237
+2025-04-11 12:36:26.842565 INFO::Fitting model to feature number 169, g__Prevotella_s__marshii
+2025-04-11 12:36:26.844189 INFO::Fitting model to feature number 170, g__Actinomyces_s__sp._HMT_171
+2025-04-11 12:36:26.845444 INFO::Fitting model to feature number 171, g__Veillonellaceae_.G.1._s__bacterium_HMT_150
+2025-04-11 12:36:26.846995 INFO::Fitting model to feature number 172, g__Lancefieldella_s__parvula
+2025-04-11 12:36:26.848244 INFO::Fitting model to feature number 173, g__Prevotella_s__micans
+2025-04-11 12:36:26.849519 INFO::Fitting model to feature number 174, g__Peptococcus_s__sp._HMT_168
+2025-04-11 12:36:26.851057 INFO::Fitting model to feature number 175, g__Prevotella_s__maculosa
+2025-04-11 12:36:26.852323 INFO::Fitting model to feature number 176, g__Prevotella_s__pallens
+2025-04-11 12:36:26.853617 INFO::Fitting model to feature number 177, g__Capnocytophaga_s__sp._HMT_323
+2025-04-11 12:36:26.855149 INFO::Fitting model to feature number 178, g__Haemophilus_s__paraphrohaemolyticus
+2025-04-11 12:36:26.856383 INFO::Fitting model to feature number 179, g__Pseudoleptotrichia_s__sp._HMT_219
+2025-04-11 12:36:26.857628 INFO::Fitting model to feature number 180, g__Olsenella_s__sp._HMT_807
+2025-04-11 12:36:26.859151 INFO::Fitting model to feature number 181, g__Acidipropionibacterium_s__acidifaciens
+2025-04-11 12:36:26.86039 INFO::Fitting model to feature number 182, g__Peptidiphaga_s__gingivicola
+2025-04-11 12:36:26.861756 INFO::Fitting model to feature number 183, g__Selenomonas_s__artemidis
+2025-04-11 12:36:26.863321 INFO::Fitting model to feature number 184, g__Gemella_s__sanguinis
+2025-04-11 12:36:26.864607 INFO::Fitting model to feature number 185, g__Haemophilus_s__sp._HMT_908
+2025-04-11 12:36:26.865884 INFO::Fitting model to feature number 186, g__Weeksellaceae_.G.1._s__sp._HMT_907
+2025-04-11 12:36:26.867471 INFO::Fitting model to feature number 187, g__Capnocytophaga_s__sp._HMT_324
+2025-04-11 12:36:26.869446 INFO::Fitting model to feature number 188, g__Peptostreptococcaceae_.G.4._s__bacterium_HMT_369
+2025-04-11 12:36:26.870778 INFO::Fitting model to feature number 189, g__Limosilactobacillus_s__fermentum
+2025-04-11 12:36:26.872404 INFO::Fitting model to feature number 190, g__Alloprevotella_s__sp._HMT_913
+2025-04-11 12:36:26.873721 INFO::Fitting model to feature number 191, g__Alloprevotella_s__rava
+2025-04-11 12:36:26.875554 INFO::Fitting model to feature number 192, g__Porphyromonas_s__sp._HMT_275
+2025-04-11 12:36:26.877597 INFO::Fitting model to feature number 193, g__Absconditabacteria_.SR1._.G.1._s__bacterium_HMT_874
+2025-04-11 12:36:26.878986 INFO::Fitting model to feature number 194, g__Weeksellaceae_.G.1._s__sp._HMT_900
+2025-04-11 12:36:26.880423 INFO::Fitting model to feature number 195, g__Selenomonas_s__sp._HMT_138
+2025-04-11 12:36:26.882108 INFO::Fitting model to feature number 196, g__Saccharibacteria_.TM7._.G.1._s__bacterium_HMT_957
+2025-04-11 12:36:26.883408 INFO::Fitting model to feature number 197, g__Mogibacterium_s__vescum
+2025-04-11 12:36:26.884823 INFO::Fitting model to feature number 198, g__Prevotella_s__sp._HMT_314
+2025-04-11 12:36:26.886478 INFO::Fitting model to feature number 199, g__Selenomonas_s__sp._HMT_137
+2025-04-11 12:36:26.887934 INFO::Fitting model to feature number 200, g__Lachnoanaerobaculum_s__orale
+2025-04-11 12:36:26.88928 INFO::Fitting model to feature number 201, g__Slackia_s__exigua
+2025-04-11 12:36:26.890872 INFO::Fitting model to feature number 202, g__Schaalia_s__sp._HMT_178
+2025-04-11 12:36:26.892328 INFO::Fitting model to feature number 203, g__Selenomonas_s__flueggei
+2025-04-11 12:36:26.893672 INFO::Fitting model to feature number 204, g__Tannerella_s__sp._HMT_808
+2025-04-11 12:36:26.895491 INFO::Fitting model to feature number 205, g__Absconditabacteria_.SR1._.G.1._s__bacterium_HMT_345
+2025-04-11 12:36:26.896874 INFO::Fitting model to feature number 206, g__Veillonellaceae_.G.1._s__bacterium_HMT_155
+2025-04-11 12:36:26.898428 INFO::Fitting model to feature number 207, g__Gracilibacteria_.GN02._.G.1._s__bacterium_HMT_872
+2025-04-11 12:36:26.900025 INFO::Fitting model to feature number 208, g__Actinomyces_s__dentalis
+2025-04-11 12:36:26.901366 INFO::Fitting model to feature number 209, g__Selenomonas_s__sp._HMT_126
+2025-04-11 12:36:26.903646 INFO::Fitting model to feature number 210, g__Oribacterium_s__sinus
+2025-04-11 12:36:26.905332 INFO::Fitting model to feature number 211, g__Prevotella_s__sp._HMT_315
+2025-04-11 12:36:26.90739 INFO::Fitting model to feature number 212, g__Lachnospiraceae_.G.2._s__bacterium_HMT_088
+2025-04-11 12:36:26.908785 INFO::Fitting model to feature number 213, g__Selenomonas_s__sp._HMT_919
+2025-04-11 12:36:26.920687 INFO::Counting total values for each feature
+2025-04-11 12:36:26.925068 INFO::Writing filtered data to file 2025-04-11maaslin2_output/features/filtered_data.tsv
+2025-04-11 12:36:26.931113 INFO::Writing filtered, normalized data to file 2025-04-11maaslin2_output/features/filtered_data_norm.tsv
+2025-04-11 12:36:26.937438 INFO::Writing filtered, normalized, transformed data to file 2025-04-11maaslin2_output/features/filtered_data_norm_transformed.tsv
+2025-04-11 12:36:26.946176 INFO::Writing residuals to file 2025-04-11maaslin2_output/fits/residuals.rds
+2025-04-11 12:36:26.948816 INFO::Writing fitted values to file 2025-04-11maaslin2_output/fits/fitted.rds
+2025-04-11 12:36:26.951587 INFO::Writing all results to file (ordered by increasing q-values): 2025-04-11maaslin2_output/all_results.tsv
+2025-04-11 12:36:26.954531 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): 2025-04-11maaslin2_output/significant_results.tsv

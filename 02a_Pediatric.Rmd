@@ -344,7 +344,7 @@ plot_all_taxa(ps_obj_ped_fs, "TSS", "condition", "Genus", "dot", plot_colors)
 # 5.0 Core Microbiome
 
 Original code below, I'm not 100% certain it's correct
-```{r, fig.height=9, fig.width=7}
+```{r, fig.height=9, fig.width=7, eval=FALSE}
 
 # Get the total list of species
 genus_list <- taxa_names(core_ps_genus) 
